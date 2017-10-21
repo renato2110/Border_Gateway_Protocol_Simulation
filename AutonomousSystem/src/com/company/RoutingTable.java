@@ -8,7 +8,6 @@ import java.util.StringTokenizer;
  * Created by Renato & Vladimir on 21/10/2017.
  */
 public class RoutingTable {
-
     private String id;
     private HashMap<String, String> routes;
 
@@ -21,12 +20,12 @@ public class RoutingTable {
         routes.put(subnet, this.id); // Agrega una ruta directamente conectada
     }
 
-    public void deleteSubnet(String subnet){
+    public void deleteSubnet(String subnet) {
         // Recalcular la vara, porque ya no puede existir aquella ruta que contenga la subnet eliminada
     }
 
-    public void resetRoutingTable(){
-        routes = new HashMap<>(); // Cuando se apaga el enrutador y se deben borrar las rutas conocidas
+    public void resetRoutingTable() {
+        routes.clear(); // Cuando se apaga el enrutador y se deben borrar las rutas conocidas
     }
 
     public void receiveUpdate(String packet) {
@@ -41,11 +40,11 @@ public class RoutingTable {
     }
 
     public void sendUpdates() {
-        String packet = this.id+"*";  // Inicio del mensaje
+        String packet = this.id + "*";  // Inicio del mensaje
         int i = 1; // contador usado para saber cuándo se llega al final del HashMap y no agregar la ","
         for (Map.Entry<String, String> entry : routes.entrySet()) {
-            packet += entry.getKey()+":"+entry.getValue(); // Arma UNA ruta, ejemplo: 192.168.0.0:id-AS1-AS"
-            if(i<routes.size()){  // Si no llega al final del HashMap, le agrega una ",", para agregar otra ruta
+            packet += entry.getKey() + ":" + entry.getValue(); // Arma UNA ruta, ejemplo: 192.168.0.0:id-AS1-AS"
+            if (i < routes.size()) {  // Si no llega al final del HashMap, le agrega una ",", para agregar otra ruta
                 packet += ",";
                 i++;
             }
@@ -61,7 +60,10 @@ public class RoutingTable {
     }
 
     public void showRoutes() {
-        // Imprimir cada ruta del hashMap
+        System.out.println("Rutas conocidas por " + id + ":");
+        for (Map.Entry<String, String> entry : routes.entrySet()) {
+            System.out.println(entry.getKey()+": "+entry.getValue());
+        }
     }
 
 }
