@@ -1,15 +1,15 @@
 package com.company;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.MultiHashtable;
+
+import java.util.*;
 
 /**
  * Created by Renato & Vladimir on 21/10/2017.
  */
 public class RoutingTable {
     private String id;
-    private HashMap<String, String> routes;
+    private HashMap<String, ArrayList<String>> routes;
 
     public RoutingTable(String id) {
         this.id = id;
@@ -17,11 +17,13 @@ public class RoutingTable {
     }
 
     public void addSubnet(String subnet) {
-        routes.put(subnet, this.id); // Agrega una ruta directamente conectada
+        ArrayList<String> subnetRoutes = new ArrayList<>();
+        subnetRoutes.add(id);
+        routes.put(subnet, subnetRoutes); // Agrega una ruta directamente conectada
     }
 
     public void deleteSubnet(String subnet) {
-        // Recalcular la vara, porque ya no puede existir aquella ruta que contenga la subnet eliminada
+        // Recalcular las rutas, porque ya no puede existir aquella ruta que contenga la subnet eliminada
     }
 
     public void resetRoutingTable() {
@@ -39,31 +41,71 @@ public class RoutingTable {
         }
     }
 
-    public void sendUpdates() {
-        String packet = this.id + "*";  // Inicio del mensaje
-        int i = 1; // contador usado para saber cuándo se llega al final del HashMap y no agregar la ","
-        for (Map.Entry<String, String> entry : routes.entrySet()) {
-            packet += entry.getKey() + ":" + entry.getValue(); // Arma UNA ruta, ejemplo: 192.168.0.0:id-AS1-AS"
-            if (i < routes.size()) {  // Si no llega al final del HashMap, le agrega una ",", para agregar otra ruta
-                packet += ",";
-                i++;
+    public String sendUpdates() { // Uso del socket, forman el String para enviar
+        String packet = id + "*";
+        int i = 1; // Utilizado para saber cuando se dejan de agrega ","
+        for (Map.Entry<String, ArrayList<String>> entry : routes.entrySet()) {
+            packet += entry.getKey()+":";
+            int minimum = this.getMinimumRoute(entry.getValue());
+            int j = 0;
+            while (j<entry.getValue().size()) {
+                if (minimum == this.getRouteSize(entry.getValue().get(j))) {
+                    packet += entry.getValue().get(j);
+                    break;
+                }
+                j++;
             }
+            if (i < this.routes.size()) {
+                packet += ",";
+            }
+            i++;
         }
-        // Uso del socket
+        return packet; // Aquí tiene que ir el uso del socket
     }
 
     public void updateRoute(String route) {
         StringTokenizer tokensRoute = new StringTokenizer(route, ":"); // Tokeniza la ruta
         String subnet = tokensRoute.nextToken(); // Guarda la subred de la ruta, ejemplo: 192.168.0.0
         String path = this.id + "-" + tokensRoute.nextToken(); // Guarda el camino para llegar a la subred con el propio "id", ejemplo: id-AS1-AS2-AS3
-        routes.put(subnet, path);
+        if (this.routes.containsKey(subnet)) {  // Si conoce al menos una ruta para la subred
+            if (!this.routes.get(subnet).contains(path)) { // Si ya conoce la ruta para la subred
+                this.routes.get(subnet).add(path);
+            }
+        } else { // Si no conoce la subred, crea un nuevo ArrayList con su ruta
+            ArrayList<String> subnetRoutes = new ArrayList<>();
+            subnetRoutes.add(path);
+            this.routes.put(subnet, subnetRoutes);
+        }
     }
 
     public void showRoutes() {
-        System.out.println("Rutas conocidas por " + id + ":");
-        for (Map.Entry<String, String> entry : routes.entrySet()) {
-            System.out.println(entry.getKey()+": "+entry.getValue());
+        System.out.println("Rutas conocidas por " + id + ":\n");
+        for (Map.Entry<String, ArrayList<String>> entry : routes.entrySet()) {
+            int minimum = this.getMinimumRoute(entry.getValue());
+            for (int i = 0; i < entry.getValue().size(); i++) {
+                if (minimum == this.getRouteSize(entry.getValue().get(i))) {
+                    System.out.printf("*");
+                }
+                System.out.println("RED " + entry.getKey() + ": " + entry.getValue().get(i));
+            }
         }
+    }
+
+    public int getMinimumRoute(ArrayList<String> paths) {
+        int minimum = 999;
+        for (int i = 0; i < paths.size(); i++) {
+            String path = paths.get(i);
+            StringTokenizer pathTokenizer = new StringTokenizer(path, "-");
+            if (minimum > pathTokenizer.countTokens()) {
+                minimum = pathTokenizer.countTokens();
+            }
+        }
+        return minimum;
+    }
+
+    public int getRouteSize(String path) {
+        StringTokenizer pathTokenizer = new StringTokenizer(path, "-");
+        return pathTokenizer.countTokens();
     }
 
 }
