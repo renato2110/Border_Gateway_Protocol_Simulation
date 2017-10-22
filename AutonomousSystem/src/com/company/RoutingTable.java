@@ -22,12 +22,19 @@ public class RoutingTable {
         routes.put(subnet, subnetRoutes); // Agrega una ruta directamente conectada
     }
 
-    public void deleteSubnet(String subnet) {
-        // Recalcular las rutas, porque ya no puede existir aquella ruta que contenga la subnet eliminada
+    public void deleteSubnet(String subnet, String AS) {
+        this.routes.remove(subnet);
+        for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
+            for (int i = 0; i < entry.getValue().size(); i++) {
+                if ((entry.getValue().get(i)).contains(AS)) {
+                    entry.getValue().remove(entry.getValue().get(i));
+                }
+            }
+        }
     }
 
     public void resetRoutingTable() {
-        routes.clear(); // Cuando se apaga el enrutador y se deben borrar las rutas conocidas
+        this.routes.clear(); // Cuando se apaga el enrutador y se deben borrar las rutas conocidas
     }
 
     public void receiveUpdate(String packet) {
@@ -42,13 +49,13 @@ public class RoutingTable {
     }
 
     public String sendUpdates() { // Uso del socket, forman el String para enviar
-        String packet = id + "*";
+        String packet = this.id + "*";
         int i = 1; // Utilizado para saber cuando se dejan de agrega ","
-        for (Map.Entry<String, ArrayList<String>> entry : routes.entrySet()) {
-            packet += entry.getKey()+":";
+        for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
+            packet += entry.getKey() + ":";
             int minimum = this.getMinimumRoute(entry.getValue());
             int j = 0;
-            while (j<entry.getValue().size()) {
+            while (j < entry.getValue().size()) {
                 if (minimum == this.getRouteSize(entry.getValue().get(j))) {
                     packet += entry.getValue().get(j);
                     break;
@@ -79,8 +86,8 @@ public class RoutingTable {
     }
 
     public void showRoutes() {
-        System.out.println("Rutas conocidas por " + id + ":\n");
-        for (Map.Entry<String, ArrayList<String>> entry : routes.entrySet()) {
+        System.out.println("Rutas conocidas por " + this.id + ":\n");
+        for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             int minimum = this.getMinimumRoute(entry.getValue());
             for (int i = 0; i < entry.getValue().size(); i++) {
                 if (minimum == this.getRouteSize(entry.getValue().get(i))) {
