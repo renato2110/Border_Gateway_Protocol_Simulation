@@ -9,7 +9,7 @@ import java.io.OutputStream;
  */
 public class Client extends Connection {
     public  Client() throws IOException {
-        super("client");
+        super("client", 1234, "localhost");
     }
 
     public void startClient(){

@@ -9,20 +9,30 @@ import java.net.Socket;
  * Created by Renato & Vladimir on 21/10/2017.
  */
 public class Connection {
-    private final int PORT = 1234;
-    private final String HOST = "localhost";
+    private int PORT;
+    private String HOST;
     protected String serverMessage;
     protected ServerSocket ss;
     protected Socket cs;
     protected DataOutputStream outServer, outClient;
 
-    public Connection(String tipo) throws IOException{
+    public Connection(String tipo, int PORT, String HOST) throws IOException{
+        this.PORT = PORT;
+        this.HOST = HOST;
         if (tipo.equalsIgnoreCase("server")) {
-            ss = new ServerSocket(PORT);
+            ss = new ServerSocket(this.PORT);
             cs = new Socket();
         }
         else {
             cs = new Socket(HOST, PORT);
         }
+    }
+
+    public void setPORT(int PORT) {
+        this.PORT = PORT;
+    }
+
+    public void setHOST(String HOST){
+        this.HOST = HOST;
     }
 }

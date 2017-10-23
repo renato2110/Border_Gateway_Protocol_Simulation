@@ -10,27 +10,30 @@ import java.io.InputStreamReader;
  */
 
 public class Server extends Connection {
+    private RoutingTable routingTable;
 
-    public Server() throws IOException {
-        super("server");
+    public Server(RoutingTable routingTable, int PORT, String HOST) throws IOException {
+        super("server", PORT, HOST);
+        this.routingTable = routingTable;
     }
 
     public void startServer() {
         try {
-            System.out.println("Esperando...");
+            System.out.println("\nServidor " + this.routingTable.getId() + " esperando...");
             cs = ss.accept();
             System.out.println("Cliente en línea");
             outClient = new DataOutputStream(cs.getOutputStream());
-            outClient.writeUTF("Petición recibida y aceptada");
+            outClient.writeUTF(routingTable.getUpdatePackage());
             BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
 
-            while ((serverMessage = input.readLine()) != null) {
+            while (!((serverMessage = input.readLine()).equals("stop"))) {
                 System.out.println(serverMessage);
+                routingTable.receiveUpdate(serverMessage);
             }
-            System.out.println("Fin de la conexión");
+            System.out.println("Servidor cerrado");
+            routingTable.showRoutes();
             ss.close();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }

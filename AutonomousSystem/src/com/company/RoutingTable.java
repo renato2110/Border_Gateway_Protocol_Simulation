@@ -16,6 +16,10 @@ public class RoutingTable {
         this.routes = new HashMap<>();
     }
 
+    public String getId() {
+        return id;
+    }
+
     public void addSubnet(String subnet) {
         ArrayList<String> subnetRoutes = new ArrayList<>();
         subnetRoutes.add(id);
@@ -84,7 +88,7 @@ public class RoutingTable {
     }
 
     public void showRoutes() {
-        System.out.println("Rutas conocidas por " + this.id + ":\n");
+        System.out.println("\nRutas conocidas por " + this.id + ":\n");
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             int minimum = this.getMinimumRouteSize(entry.getValue());
             for (int i = 0; i < entry.getValue().size(); i++) {
