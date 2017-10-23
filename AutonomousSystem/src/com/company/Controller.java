@@ -45,7 +45,7 @@ public class Controller {
             for (int line = 0; line < 3; line++) {
                 switch (line) {
                     case 0:
-                        while (!((reader = input.readLine()).contains("#"))) {
+                        while (!((reader = input.readLine()).contains("#")))k {
                             this.routingTable.addSubnet(reader);
                         }
                         break;
@@ -58,9 +58,7 @@ public class Controller {
                         }
                         break;
                     case 2:
-                        while ((reader = input.readLine()) != null) {
                             this.server = new Server(this.routingTable, Integer.parseInt(reader), "localhost");
-                        }
                         break;
                     default:
                         break;
