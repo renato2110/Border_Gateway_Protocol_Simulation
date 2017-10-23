@@ -19,17 +19,9 @@ public class Controller {
     private HashMap<String, String> neighbors;
 
     public Controller() throws IOException {
-        this.initRouter();
         this.neighbors = new HashMap<>();
         readInputFile();
         this.startServer();
-    }
-
-    private void initRouter(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.printf("Ingrese el nombre del Enrutador: ");
-        String name = scanner.nextLine();
-        this.routingTable = new RoutingTable("AS2");
     }
 
     private void readInputFile() {
@@ -42,14 +34,18 @@ public class Controller {
             BufferedReader input = new BufferedReader(new FileReader(file));
             input.readLine();
             String reader;
-            for (int line = 0; line < 3; line++) {
+            for (int line = 0; line < 4; line++) {
                 switch (line) {
                     case 0:
-                        while (!((reader = input.readLine()).contains("#")))k {
+                        reader = input.readLine();
+                        this.routingTable = new RoutingTable(reader);
+                        break;
+                    case 1:
+                        while (!((reader = input.readLine()).contains("#"))) {
                             this.routingTable.addSubnet(reader);
                         }
                         break;
-                    case 1:
+                    case 2:
                         while (!((reader = input.readLine()).contains("#"))) {
                             StringTokenizer stringTokenizer = new StringTokenizer(reader, ":");
                             String ip = stringTokenizer.nextToken();
@@ -57,7 +53,8 @@ public class Controller {
                             neighbors.put(ip, port);
                         }
                         break;
-                    case 2:
+                    case 3:
+                            reader = input.readLine();
                             this.server = new Server(this.routingTable, Integer.parseInt(reader), "localhost");
                         break;
                     default:

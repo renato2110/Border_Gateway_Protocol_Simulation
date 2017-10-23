@@ -56,10 +56,10 @@ public class RoutingTable {
         String packet = this.id + "*";
         int i = 1; // Utilizado para saber cuando se dejan de agrega ","
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) { // Recorre todas las subredes conocidas
-            packet += entry.getKey() + ":"; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
+            packet += entry.getKey() + ":" + id + "-"; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
             int minimum = this.getMinimumRouteSize(entry.getValue()); // Define el tamaño para la ruta menor
             for (int j = 0; j < entry.getValue().size(); j++) { //Recorre las rutas conocidas hasta encontrar la menor
-                if (minimum == this.getRouteSize(entry.getValue().get(j))) {
+                if (minimum == j) {
                     packet += entry.getValue().get(j);
                     break;
                 }
@@ -75,7 +75,7 @@ public class RoutingTable {
     public void updateRoute(String route) {
         StringTokenizer tokensRoute = new StringTokenizer(route, ":"); // Tokeniza la ruta
         String subnet = tokensRoute.nextToken(); // Guarda la subred de la ruta, ejemplo: 192.168.0.0
-        String path = this.id + "-" + tokensRoute.nextToken(); // Guarda el camino para llegar a la subred con el propio "id", ejemplo: id-AS1-AS2-AS3
+        String path = tokensRoute.nextToken(); // Guarda el camino para llegar a la subred con el propio "id", ejemplo: id-AS1-AS2-AS3
         if (this.routes.containsKey(subnet)) {  // Si conoce al menos una ruta para la subred
             if (!this.routes.get(subnet).contains(path)) { // Si ya conoce la ruta para la subred
                 this.routes.get(subnet).add(path);
@@ -92,7 +92,7 @@ public class RoutingTable {
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             int minimum = this.getMinimumRouteSize(entry.getValue());
             for (int i = 0; i < entry.getValue().size(); i++) {
-                if (minimum == this.getRouteSize(entry.getValue().get(i))) {
+                if (minimum == i) {
                     System.out.printf("*");
                 }
                 System.out.println("RED " + entry.getKey() + ": " + entry.getValue().get(i));
@@ -101,12 +101,14 @@ public class RoutingTable {
     }
 
     private int getMinimumRouteSize(ArrayList<String> paths) {
-        int minimum = 20;
+        int value = 20;
+        int minimum = 0;
         for (int i = 0; i < paths.size(); i++) {
             String path = paths.get(i);
             StringTokenizer pathTokenizer = new StringTokenizer(path, "-");
-            if (minimum > pathTokenizer.countTokens()) {
-                minimum = pathTokenizer.countTokens();
+            if (value > pathTokenizer.countTokens()) {
+                value = pathTokenizer.countTokens();
+                minimum = i;
             }
         }
         return minimum;
