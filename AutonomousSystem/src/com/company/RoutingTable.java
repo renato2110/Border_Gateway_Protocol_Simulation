@@ -56,16 +56,19 @@ public class RoutingTable {
         String packet = this.id + "*";
         int i = 1; // Utilizado para saber cuando se dejan de agrega ","
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) { // Recorre todas las subredes conocidas
-            packet += entry.getKey() + ":" + id + "-"; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
+            String temporalPacket = entry.getKey() + ":" + id + "-"; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
             int minimum = this.getMinimumRouteSize(entry.getValue()); // Define el tamaño para la ruta menor
             for (int j = 0; j < entry.getValue().size(); j++) { //Recorre las rutas conocidas hasta encontrar la menor
                 if (minimum == j) {
                     String route = entry.getValue().get(j);
-                    if (!((route.substring(0,3)).equals(neighbor))) {
-                        packet += route;
-                    }
-                    else {
-                        packet +=  "METODO PARA HACER ESTO BIEN";
+                    if (((route.substring(0, 3)).equals(neighbor))) {
+                        if (packet.endsWith(",")) {
+                            packet = packet.substring(0,packet.length()-1);
+                        }
+                        i++;
+                    } else {
+                        temporalPacket += route;
+                        packet += temporalPacket;
                     }
                     break;
                 }
@@ -119,10 +122,4 @@ public class RoutingTable {
         }
         return minimum;
     }
-
-    private int getRouteSize(String path) {
-        StringTokenizer pathTokenizer = new StringTokenizer(path, "-");
-        return pathTokenizer.countTokens();
-    }
-
 }
