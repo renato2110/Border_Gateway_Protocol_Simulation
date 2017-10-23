@@ -81,4 +81,11 @@ public class Controller {
     public void startServer(){
         this.server.startServer();
     }
+
+    public void stopServer(){
+        this.routingTable.resetRoutingTable();
+        neighbors.clear();
+    }
+
+
 }
