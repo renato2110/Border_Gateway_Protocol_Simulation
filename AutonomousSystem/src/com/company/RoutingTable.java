@@ -52,7 +52,7 @@ public class RoutingTable {
         }
     }
 
-    public String getUpdatePackage() { // Uso del socket, forman el String para enviar
+    public String getUpdatePackage(String neighbor) { // Uso del socket, forman el String para enviar
         String packet = this.id + "*";
         int i = 1; // Utilizado para saber cuando se dejan de agrega ","
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) { // Recorre todas las subredes conocidas
@@ -60,7 +60,13 @@ public class RoutingTable {
             int minimum = this.getMinimumRouteSize(entry.getValue()); // Define el tamaño para la ruta menor
             for (int j = 0; j < entry.getValue().size(); j++) { //Recorre las rutas conocidas hasta encontrar la menor
                 if (minimum == j) {
-                    packet += entry.getValue().get(j);
+                    String route = entry.getValue().get(j);
+                    if (!((route.substring(0,3)).equals(neighbor))) {
+                        packet += route;
+                    }
+                    else {
+                        packet +=  "METODO PARA HACER ESTO BIEN";
+                    }
                     break;
                 }
             }

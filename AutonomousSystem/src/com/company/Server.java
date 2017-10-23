@@ -23,7 +23,7 @@ public class Server extends Connection {
             cs = ss.accept();
             System.out.println("Cliente conectado en el servidor "+this.routingTable.getId());
             outClient = new DataOutputStream(cs.getOutputStream());
-            outClient.writeUTF(routingTable.getUpdatePackage());
+            outClient.writeUTF(routingTable.getUpdatePackage(" ")); // CAMBIAAAAAAAAAAAAR
             BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
 
             while (!((serverMessage = input.readLine()).equals("stop"))) {
