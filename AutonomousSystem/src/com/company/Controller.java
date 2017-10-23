@@ -16,10 +16,10 @@ public class Controller {
 
     private Server server;
     private RoutingTable routingTable;
-    private HashMap<String, String> neighbors;
+    private HashMap<String, String> servers;
 
     public Controller() throws IOException {
-        this.neighbors = new HashMap<>();
+        this.servers = new HashMap<>();
         readInputFile();
         this.startServer();
     }
@@ -50,7 +50,7 @@ public class Controller {
                             StringTokenizer stringTokenizer = new StringTokenizer(reader, ":");
                             String ip = stringTokenizer.nextToken();
                             String port = stringTokenizer.nextToken();
-                            neighbors.put(ip, port);
+                            servers.put(ip, port);
                         }
                         break;
                     case 3:
@@ -79,7 +79,7 @@ public class Controller {
 
     public void stopServer(){
         this.routingTable.resetRoutingTable();
-        neighbors.clear();
+        servers.clear();
     }
 
 
