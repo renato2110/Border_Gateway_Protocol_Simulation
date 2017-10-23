@@ -27,12 +27,4 @@ public class Connection {
             cs = new Socket(HOST, PORT);
         }
     }
-
-    public void setPORT(int PORT) {
-        this.PORT = PORT;
-    }
-
-    public void setHOST(String HOST){
-        this.HOST = HOST;
-    }
 }

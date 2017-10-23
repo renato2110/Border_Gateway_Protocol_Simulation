@@ -21,7 +21,7 @@ public class Server extends Connection {
         try {
             System.out.println("\nServidor " + this.routingTable.getId() + " esperando...");
             cs = ss.accept();
-            System.out.println("Cliente en línea");
+            System.out.println("Cliente conectado en el servidor "+this.routingTable.getId());
             outClient = new DataOutputStream(cs.getOutputStream());
             outClient.writeUTF(routingTable.getUpdatePackage());
             BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
@@ -30,8 +30,7 @@ public class Server extends Connection {
                 System.out.println(serverMessage);
                 routingTable.receiveUpdate(serverMessage);
             }
-            System.out.println("Servidor cerrado");
-            routingTable.showRoutes();
+            System.out.println("\nServidor " + this.routingTable.getId() + " cerrado");
             ss.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -100,7 +100,7 @@ public class RoutingTable {
         }
     }
 
-    public int getMinimumRouteSize(ArrayList<String> paths) {
+    private int getMinimumRouteSize(ArrayList<String> paths) {
         int minimum = 20;
         for (int i = 0; i < paths.size(); i++) {
             String path = paths.get(i);
@@ -112,7 +112,7 @@ public class RoutingTable {
         return minimum;
     }
 
-    public int getRouteSize(String path) {
+    private int getRouteSize(String path) {
         StringTokenizer pathTokenizer = new StringTokenizer(path, "-");
         return pathTokenizer.countTokens();
     }

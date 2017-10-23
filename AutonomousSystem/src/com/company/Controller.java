@@ -22,8 +22,7 @@ public class Controller {
         this.initRouter();
         this.neighbors = new HashMap<>();
         readInputFile();
-        //this.routingTable.showRoutes();
-        this.server.startServer();
+        this.startServer();
     }
 
     private void initRouter(){
@@ -35,7 +34,7 @@ public class Controller {
 
     private void readInputFile() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Ingrese la ruta del archivo");
+        System.out.printf("Ingrese la ruta del archivo: ");
         String file = scanner.nextLine();
         scanner.close();
 
@@ -69,8 +68,17 @@ public class Controller {
             }
         } catch (FileNotFoundException e) {
             System.out.println("Archivo no valido");
+            System.exit(0);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showRoutes(){
+        this.routingTable.showRoutes();
+    }
+
+    public void startServer(){
+        this.server.startServer();
     }
 }
