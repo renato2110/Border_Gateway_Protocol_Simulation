@@ -110,11 +110,13 @@ public class RoutingTable {
     }
 
     private int getMinimumRouteSize(ArrayList<String> paths) {
-        int value = 20;
+        String path = paths.get(0);
+        StringTokenizer pathTokenizer = new StringTokenizer(path, "-");
+        int value = pathTokenizer.countTokens();
         int minimum = 0;
-        for (int i = 0; i < paths.size(); i++) {
-            String path = paths.get(i);
-            StringTokenizer pathTokenizer = new StringTokenizer(path, "-");
+        for (int i = 1; i < paths.size(); i++) {
+            path = paths.get(i);
+            pathTokenizer = new StringTokenizer(path, "-");
             if (value > pathTokenizer.countTokens()) {
                 value = pathTokenizer.countTokens();
                 minimum = i;
