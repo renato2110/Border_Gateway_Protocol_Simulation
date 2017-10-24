@@ -20,7 +20,7 @@ public class Controller {
 
     public Controller() throws IOException {
         this.servers = new HashMap<>();
-        readInputFile();
+        this.readInputFile();
         this.startServer();
     }
 
@@ -28,6 +28,7 @@ public class Controller {
         Scanner scanner = new Scanner(System.in);
         System.out.printf("Ingrese la ruta del archivo: ");
         String file = scanner.nextLine();
+        System.out.println("ARCHIVO: " + file);
         scanner.close();
 
         try {
@@ -55,7 +56,7 @@ public class Controller {
                         break;
                     case 3:
                             reader = input.readLine();
-                            this.server = new Server(this.routingTable, Integer.parseInt(reader), "localhost");
+                            this.server = new Server(this.routingTable, Integer.parseInt(reader));
                         break;
                     default:
                         break;

@@ -7,23 +7,27 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        // Controller controller = new Controller();
+        Controller controller = new Controller();
+
+        /*RoutingTable routingTable = new RoutingTable("AS9");
+        routingTable.receiveUpdate("AS1*192.168.0.0:AS1-AS2-AS3,10.0.0.0:AS1-AS3,192.168.0.0:AS2-AS8,192.168.0.0:AS2-AS8,10.0.0.0:AS4-AS6");
+        //routingTable.showRoutes();
+        //System.out.println("\n" + routingTable.getUpdatePackage("AS9"));
 
 
-        RoutingTable routingTable = new RoutingTable("AS9");
-        routingTable.receiveUpdate("AS1*192.168.0.0:AS1-AS2-AS3,10.0.0.0:AS1-AS3,192.168.0.0:AS2-AS8,192.168.0.0:AS2-AS8,10.0.0.0:A4-AS6");
-        routingTable.showRoutes();
-        System.out.println("\n" + routingTable.getUpdatePackage("AS9"));
 
 
-
-        /*
-        Server server = new Server("AS1");
+        Server server = new Server(routingTable,5555);
         System.out.println("Iniciando servidor\n");
-        server.startServer();*/
+        (new Thread(server)).start();
+        //server.startServer();
 
-        /*Client client = new Client();
+
+
+        Client client = new Client(5555,"localhost");
         System.out.println("Iniciando cliente\n");
-        client.startClient();*/
+        (new Thread(client)).start();
+        //client.startClient();
+        */
     }
 }

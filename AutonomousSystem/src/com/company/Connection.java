@@ -2,6 +2,8 @@ package com.company;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -24,7 +26,9 @@ public class Connection {
             cs = new Socket();
         }
         else {
+            //InetAddress inetAddress = new Inet4Address(HOST);
             cs = new Socket(HOST, PORT);
+            System.out.println("HOST: " + HOST + " PORT: " + PORT);
         }
     }
 }
