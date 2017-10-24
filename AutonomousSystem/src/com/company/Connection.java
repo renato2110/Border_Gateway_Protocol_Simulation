@@ -2,10 +2,7 @@ package com.company;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 
 /**
  * Created by Renato & Vladimir on 21/10/2017.
@@ -18,7 +15,7 @@ public class Connection {
     protected Socket cs;
     protected DataOutputStream outServer, outClient;
 
-    public Connection(String tipo, int PORT, String HOST) throws IOException{
+    public void initConnection(String tipo, int PORT, String HOST) throws IOException{
         this.PORT = PORT;
         this.HOST = HOST;
         if (tipo.equalsIgnoreCase("server")) {
@@ -27,8 +24,43 @@ public class Connection {
         }
         else {
             //InetAddress inetAddress = new Inet4Address(HOST);
-            cs = new Socket(HOST, PORT);
-            System.out.println("HOST: " + HOST + " PORT: " + PORT);
+            boolean connected = false;
+
+            while (!connected){
+                try {
+                    cs = new Socket(HOST, PORT);
+
+                }catch (ConnectException e){
+                    System.out.println("No hay conexión al servidor: " + HOST + ":" + PORT);
+                }
+                if(cs != null){
+                    connected = true;
+                }
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //System.out.println("HOST: " + HOST + " PORT: " + PORT);
         }
+    }
+
+    public int getPORT() {
+        return PORT;
+    }
+
+    public void setPORT(int PORT) {
+        this.PORT = PORT;
+    }
+
+    public String getHOST() {
+        return HOST;
+    }
+
+    public void setHOST(String HOST) {
+        this.HOST = HOST;
     }
 }

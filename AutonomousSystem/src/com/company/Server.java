@@ -11,14 +11,18 @@ import java.io.InputStreamReader;
 
 public class Server extends Connection implements Runnable{
     private RoutingTable routingTable;
+    private int port;
 
     public Server(RoutingTable routingTable, int PORT) throws IOException {
-        super("server", PORT, "localhost");
+        this.port = PORT;
         this.routingTable = routingTable;
     }
 
     public void startServer() {
         try {
+
+            this.initConnection("server", this.port, "localhost");
+
             System.out.println("\nServidor " + this.routingTable.getId() + " esperando...");
             cs = ss.accept();
             System.out.println("Cliente conectado en el servidor "+this.routingTable.getId());

@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Created by Renato on 22/10/2017.
@@ -17,9 +14,11 @@ public class Controller {
     private Server server;
     private RoutingTable routingTable;
     private HashMap<String, String> servers;
+    private List<Client> clients;
 
     public Controller() throws IOException {
         this.servers = new HashMap<>();
+        this.clients = new ArrayList<>();
         this.readInputFile();
         this.startServer();
     }
@@ -28,30 +27,39 @@ public class Controller {
         Scanner scanner = new Scanner(System.in);
         System.out.printf("Ingrese la ruta del archivo: ");
         String file = scanner.nextLine();
-        System.out.println("ARCHIVO: " + file);
         scanner.close();
 
         try {
             BufferedReader input = new BufferedReader(new FileReader(file));
             input.readLine();
             String reader;
+
             for (int line = 0; line < 4; line++) {
                 switch (line) {
                     case 0:
                         reader = input.readLine();
                         this.routingTable = new RoutingTable(reader);
+                        input.readLine();
                         break;
                     case 1:
                         while (!((reader = input.readLine()).contains("#"))) {
                             this.routingTable.addSubnet(reader);
+
                         }
                         break;
                     case 2:
+                        String ip;
+                        String port;
+                        StringTokenizer stringTokenizer;
+                        Client newClient;
                         while (!((reader = input.readLine()).contains("#"))) {
-                            StringTokenizer stringTokenizer = new StringTokenizer(reader, ":");
-                            String ip = stringTokenizer.nextToken();
-                            String port = stringTokenizer.nextToken();
+                            stringTokenizer = new StringTokenizer(reader, ":");
+                            ip = stringTokenizer.nextToken();
+                            port = stringTokenizer.nextToken();
                             servers.put(ip, port);
+                            newClient = new Client(Integer.parseInt(port),ip);
+                            this.clients.add(newClient);
+                            (new Thread(newClient)).start();
                         }
                         break;
                     case 3:
@@ -67,6 +75,8 @@ public class Controller {
             System.exit(0);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (NoSuchElementException e){
+            e.printStackTrace();
         }
     }
 
@@ -75,7 +85,7 @@ public class Controller {
     }
 
     public void startServer(){
-        this.server.startServer();
+        (new Thread(this.server)).start();
     }
 
     public void stopServer(){
