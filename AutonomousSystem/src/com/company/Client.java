@@ -10,19 +10,21 @@ import java.io.OutputStream;
 public class Client extends Connection implements Runnable{
     private RoutingTable routingTable;
     private int port;
-    private String hostname;
+    private String hostAddress;
     private String AS;
 
     public  Client(RoutingTable routingTable, int port, String host, String AS) throws IOException {
         this.routingTable = routingTable;
         this.port = port;
-        this.hostname = host;
+        this.hostAddress= host;
         this.AS = AS;
+        this.PORT = port;
+        this.HOST = host;
     }
 
     public void startClient(){
         try {
-            this.initConnection("client",this.port,this.hostname);
+            this.initConnection("client",this.port,this.hostAddress);
             outServer = new DataOutputStream(cs.getOutputStream());
             outServer.flush();
             outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS)+"\n");
@@ -31,6 +33,8 @@ public class Client extends Connection implements Runnable{
             e.printStackTrace();
         }
     }
+
+
 
     @Override
     public void run() {

@@ -8,12 +8,13 @@ import java.net.*;
  * Created by Renato & Vladimir on 21/10/2017.
  */
 public class Connection {
-    private int PORT;
-    private String HOST;
+    protected int PORT;
+    protected String HOST;
     protected String serverMessage;
     protected ServerSocket ss;
     protected Socket cs;
     protected DataOutputStream outServer, outClient;
+
 
     public void initConnection(String tipo, int PORT, String HOST) throws IOException{
         this.PORT = PORT;

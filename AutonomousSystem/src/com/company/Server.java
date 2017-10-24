@@ -32,9 +32,11 @@ public class Server extends Connection implements Runnable{
 
             BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
 
+            //System.out.println(serverMessage);
             while ((serverMessage = input.readLine()) != null) {
                 System.out.println(serverMessage);
-                //routingTable.receiveUpdate(serverMessage);
+                routingTable.receiveUpdate(serverMessage);
+                routingTable.showRoutes();
             }
             System.out.println("\nServidor " + this.routingTable.getId() + " cerrado");
             ss.close();

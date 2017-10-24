@@ -24,8 +24,9 @@ public class Controller {
 
     private void readInputFile() {
         Scanner scanner = new Scanner(System.in);
-        System.out.printf("Ingrese la ruta del archivo: ");
-        String file = scanner.nextLine();
+        //System.out.printf("Ingrese la ruta del archivo: ");
+        String file /*= scanner.nextLine()*/;
+        file = "/home/vladimir/Escritorio/input.txt";
         scanner.close();
 
         try {
@@ -60,6 +61,7 @@ public class Controller {
                                     port = stringTokenizer.nextToken();
                                     servers.put(ip, port);
                                     newClient = new Client(this.routingTable, Integer.parseInt(port),ip, "AS2");
+                                    System.out.println(newClient.getHOST() +":"+ newClient.getPORT());
                                     this.clients.add(newClient);
                                 }
                             }

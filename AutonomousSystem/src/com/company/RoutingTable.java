@@ -42,13 +42,18 @@ public class RoutingTable {
     }
 
     public void receiveUpdate(String packet) {
-        StringTokenizer tokensPacket = new StringTokenizer(packet, "*");  // Tokeniza el paquete
-        tokensPacket.nextToken(); // Quién es el que envía el paquete
-        String transmitterRoutes = tokensPacket.nextToken(); // Guarda todas las rutas separadas por ","
-        StringTokenizer tokensTransmitterRoutes = new StringTokenizer(transmitterRoutes, ",");  // Tokeniza las rutas separadas por ","
-        while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
-            String updatedRoute = tokensTransmitterRoutes.nextToken();
-            this.updateRoute(updatedRoute);
+        try{
+            StringTokenizer tokensPacket = new StringTokenizer(packet, "*");  // Tokeniza el paquete
+            tokensPacket.nextToken(); // Quién es el que envía el paquete
+            String transmitterRoutes = tokensPacket.nextToken(); // Guarda todas las rutas separadas por ","
+            StringTokenizer tokensTransmitterRoutes = new StringTokenizer(transmitterRoutes, ",");  // Tokeniza las rutas separadas por ","
+            while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
+                String updatedRoute = tokensTransmitterRoutes.nextToken();
+                this.updateRoute(updatedRoute);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Errorcito");
         }
     }
 
@@ -83,17 +88,23 @@ public class RoutingTable {
 
     public void updateRoute(String route) {
         StringTokenizer tokensRoute = new StringTokenizer(route, ":"); // Tokeniza la ruta
-        String subnet = tokensRoute.nextToken(); // Guarda la subred de la ruta, ejemplo: 192.168.0.0
-        String path = tokensRoute.nextToken(); // Guarda el camino para llegar a la subred con el propio "id", ejemplo: id-AS1-AS2-AS3
-        if (this.routes.containsKey(subnet)) {  // Si conoce al menos una ruta para la subred
-            if (!this.routes.get(subnet).contains(path)) { // Si ya conoce la ruta para la subred
-                this.routes.get(subnet).add(path);
+        if(tokensRoute.hasMoreTokens()){
+            String subnet = tokensRoute.nextToken(); // Guarda la subred de la ruta, ejemplo: 192.168.0.0
+            if(tokensRoute.hasMoreTokens()){
+                String path = tokensRoute.nextToken(); // Guarda el camino para llegar a la subred con el propio "id", ejemplo: id-AS1-AS2-AS3
+                if (this.routes.containsKey(subnet)) {  // Si conoce al menos una ruta para la subred
+                    if (!this.routes.get(subnet).contains(path)) { // Si ya conoce la ruta para la subred
+                        this.routes.get(subnet).add(path);
+                    }
+                } else { // Si no conoce la subred, crea un nuevo ArrayList con su ruta
+                    ArrayList<String> subnetRoutes = new ArrayList<>();
+                    subnetRoutes.add(path);
+                    this.routes.put(subnet, subnetRoutes);
+                }
             }
-        } else { // Si no conoce la subred, crea un nuevo ArrayList con su ruta
-            ArrayList<String> subnetRoutes = new ArrayList<>();
-            subnetRoutes.add(path);
-            this.routes.put(subnet, subnetRoutes);
+
         }
+
     }
 
     public void showRoutes() {
