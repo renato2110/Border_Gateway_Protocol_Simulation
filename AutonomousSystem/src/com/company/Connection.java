@@ -28,7 +28,8 @@ public class Connection {
 
             while (!connected){
                 try {
-                    cs = new Socket(HOST, PORT);
+                    InetAddress inetAddress =InetAddress.getByName(HOST);
+                    cs = new Socket(inetAddress,PORT);
 
                 }catch (ConnectException e){
                     System.out.println("No hay conexión al servidor: " + HOST + ":" + PORT);

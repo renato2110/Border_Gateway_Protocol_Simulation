@@ -24,11 +24,9 @@ public class Client extends Connection implements Runnable{
         try {
             this.initConnection("client",this.port,this.hostname);
             outServer = new DataOutputStream(cs.getOutputStream());
-            for (int i = 0; i < 2; i++) {
-                outServer.flush();
-                outServer.writeUTF(this.routingTable.getUpdatePackage(AS)+"\n");
-            }
-            cs.close();
+            outServer.flush();
+            outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS)+"\n");
+            //cs.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

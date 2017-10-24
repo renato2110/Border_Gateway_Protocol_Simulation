@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Controller {
 
-    private Server server;
+    private List<Server> listeningServers;
     private RoutingTable routingTable;
     private HashMap<String, String> servers;
     private List<Client> clients;
@@ -20,7 +20,6 @@ public class Controller {
         this.servers = new HashMap<>();
         this.clients = new ArrayList<>();
         this.readInputFile();
-        this.startServer();
     }
 
     private void readInputFile() {
@@ -59,17 +58,24 @@ public class Controller {
                             servers.put(ip, port);
                             newClient = new Client(this.routingTable, Integer.parseInt(port),ip, "AS2");
                             this.clients.add(newClient);
-                            (new Thread(newClient)).start();
                         }
                         break;
                     case 3:
-                            reader = input.readLine();
-                            this.server = new Server(this.routingTable, Integer.parseInt(reader));
-                        break;
+                            this.listeningServers = new ArrayList<Server>();
+                            while ((reader = input.readLine()) != null) {
+                                this.listeningServers.add(new Server(this.routingTable, Integer.parseInt(reader)));
+                            }
+                            break;
                     default:
                         break;
                 }
             }
+
+            this.startServers();
+            for(Client c : this.clients){
+                (new Thread(c)).start();
+            }
+
         } catch (FileNotFoundException e) {
             System.out.println("Archivo no valido");
             System.exit(0);
@@ -84,8 +90,10 @@ public class Controller {
         this.routingTable.showRoutes();
     }
 
-    public void startServer(){
-        (new Thread(this.server)).start();
+    public void startServers(){
+        for(Server s : listeningServers){
+            (new Thread(s)).start();
+        }
     }
 
     public void stopServer(){
