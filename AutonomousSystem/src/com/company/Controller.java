@@ -53,11 +53,16 @@ public class Controller {
                         Client newClient;
                         while (!((reader = input.readLine()).contains("#"))) {
                             stringTokenizer = new StringTokenizer(reader, ":");
-                            ip = stringTokenizer.nextToken();
-                            port = stringTokenizer.nextToken();
-                            servers.put(ip, port);
-                            newClient = new Client(this.routingTable, Integer.parseInt(port),ip, "AS2");
-                            this.clients.add(newClient);
+                            if(stringTokenizer.hasMoreTokens()){
+                                ip = stringTokenizer.nextToken();
+
+                                if(stringTokenizer.hasMoreTokens()){
+                                    port = stringTokenizer.nextToken();
+                                    servers.put(ip, port);
+                                    newClient = new Client(this.routingTable, Integer.parseInt(port),ip, "AS2");
+                                    this.clients.add(newClient);
+                                }
+                            }
                         }
                         break;
                     case 3:
