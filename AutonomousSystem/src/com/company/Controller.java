@@ -57,7 +57,7 @@ public class Controller {
                             ip = stringTokenizer.nextToken();
                             port = stringTokenizer.nextToken();
                             servers.put(ip, port);
-                            newClient = new Client(Integer.parseInt(port),ip);
+                            newClient = new Client(this.routingTable, Integer.parseInt(port),ip, "AS2");
                             this.clients.add(newClient);
                             (new Thread(newClient)).start();
                         }

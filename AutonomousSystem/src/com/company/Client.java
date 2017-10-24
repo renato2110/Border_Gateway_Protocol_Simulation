@@ -8,12 +8,16 @@ import java.io.OutputStream;
  * Created by Renato & Vladimir on 21/10/2017.
  */
 public class Client extends Connection implements Runnable{
-    private String hostname;
+    private RoutingTable routingTable;
     private int port;
+    private String hostname;
+    private String AS;
 
-    public  Client(int port, String host) throws IOException {
-        this.hostname = host;
+    public  Client(RoutingTable routingTable, int port, String host, String AS) throws IOException {
+        this.routingTable = routingTable;
         this.port = port;
+        this.hostname = host;
+        this.AS = AS;
     }
 
     public void startClient(){
@@ -22,12 +26,11 @@ public class Client extends Connection implements Runnable{
             outServer = new DataOutputStream(cs.getOutputStream());
             for (int i = 0; i < 2; i++) {
                 outServer.flush();
-                outServer.writeUTF("AS1*192.167.0.0:AS1-AS2-AS3,10.5.0.0:AS1-AS3,192.168.3.0:AS2-AS8,192.168.85.0:AS2-AS8,10.0.33.0:AS4-AS6\n");
+                outServer.writeUTF(this.routingTable.getUpdatePackage(AS)+"\n");
             }
             cs.close();
-        }
-        catch (Exception e){
-            System.out.println("Hay un errorcillo");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

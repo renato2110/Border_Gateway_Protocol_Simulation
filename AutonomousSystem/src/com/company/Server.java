@@ -34,7 +34,7 @@ public class Server extends Connection implements Runnable{
 
             while ((serverMessage = input.readLine()) != null) {
                 System.out.println(serverMessage);
-                routingTable.receiveUpdate(serverMessage);
+                //routingTable.receiveUpdate(serverMessage);
             }
             System.out.println("\nServidor " + this.routingTable.getId() + " cerrado");
             ss.close();
