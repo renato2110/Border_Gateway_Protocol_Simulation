@@ -9,7 +9,7 @@ public class Main {
 
 
         Controller controller = new Controller();
-
+        (new Thread(controller)).start();
 
         /*RoutingTable routingTable = new RoutingTable("AS9");
         routingTable.receiveUpdate("AS1*192.168.0.0:AS1-AS2-AS3,10.0.0.0:AS1-AS3,192.168.0.0:AS2-AS8,192.168.0.0:AS2-AS8,10.0.0.0:AS4-AS6");

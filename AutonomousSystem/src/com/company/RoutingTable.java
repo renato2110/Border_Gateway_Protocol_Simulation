@@ -1,15 +1,17 @@
 package com.company;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.MultiHashtable;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by Renato & Vladimir on 21/10/2017.
  */
 public class RoutingTable {
+    static Semaphore semaphore = new Semaphore(1);
     private String id;
     private HashMap<String, ArrayList<String>> routes;
+
 
     public RoutingTable(String id) {
         this.id = id;
@@ -87,22 +89,28 @@ public class RoutingTable {
     }
 
     public void updateRoute(String route) {
-        StringTokenizer tokensRoute = new StringTokenizer(route, ":"); // Tokeniza la ruta
-        if(tokensRoute.hasMoreTokens()){
-            String subnet = tokensRoute.nextToken(); // Guarda la subred de la ruta, ejemplo: 192.168.0.0
+        try {
+            semaphore.acquire();
+            StringTokenizer tokensRoute = new StringTokenizer(route, ":"); // Tokeniza la ruta
             if(tokensRoute.hasMoreTokens()){
-                String path = tokensRoute.nextToken(); // Guarda el camino para llegar a la subred con el propio "id", ejemplo: id-AS1-AS2-AS3
-                if (this.routes.containsKey(subnet)) {  // Si conoce al menos una ruta para la subred
-                    if (!this.routes.get(subnet).contains(path)) { // Si ya conoce la ruta para la subred
-                        this.routes.get(subnet).add(path);
+                String subnet = tokensRoute.nextToken(); // Guarda la subred de la ruta, ejemplo: 192.168.0.0
+                if(tokensRoute.hasMoreTokens()){
+                    String path = tokensRoute.nextToken(); // Guarda el camino para llegar a la subred con el propio "id", ejemplo: id-AS1-AS2-AS3
+                    if (this.routes.containsKey(subnet)) {  // Si conoce al menos una ruta para la subred
+                        if (!this.routes.get(subnet).contains(path)) { // Si ya conoce la ruta para la subred
+                            this.routes.get(subnet).add(path);
+                        }
+                    } else { // Si no conoce la subred, crea un nuevo ArrayList con su ruta
+                        ArrayList<String> subnetRoutes = new ArrayList<>();
+                        subnetRoutes.add(path);
+                        this.routes.put(subnet, subnetRoutes);
                     }
-                } else { // Si no conoce la subred, crea un nuevo ArrayList con su ruta
-                    ArrayList<String> subnetRoutes = new ArrayList<>();
-                    subnetRoutes.add(path);
-                    this.routes.put(subnet, subnetRoutes);
                 }
-            }
 
+            }
+            semaphore.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
     }
