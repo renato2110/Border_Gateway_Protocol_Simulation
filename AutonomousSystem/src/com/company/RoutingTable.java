@@ -24,7 +24,7 @@ public class RoutingTable {
 
     public void addSubnet(String subnet) {
         ArrayList<String> subnetRoutes = new ArrayList<>();
-        subnetRoutes.add(id);
+        subnetRoutes.add("");
         routes.put(subnet, subnetRoutes); // Agrega una ruta directamente conectada
     }
 
@@ -44,7 +44,8 @@ public class RoutingTable {
     }
 
     public void receiveUpdate(String packet) {
-        try{
+        try {
+            semaphore.acquire();
             StringTokenizer tokensPacket = new StringTokenizer(packet, "*");  // Tokeniza el paquete
             tokensPacket.nextToken(); // Quién es el que envía el paquete
             String transmitterRoutes = tokensPacket.nextToken(); // Guarda todas las rutas separadas por ","
@@ -53,9 +54,10 @@ public class RoutingTable {
                 String updatedRoute = tokensTransmitterRoutes.nextToken();
                 this.updateRoute(updatedRoute);
             }
-        }catch (Exception e){
+            semaphore.release();
+        } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Errorcito");
+            System.out.println("Errorcito en receiveUpdate");
         }
     }
 
@@ -63,21 +65,28 @@ public class RoutingTable {
         String packet = this.id + "*";
         int i = 1; // Utilizado para saber cuando se dejan de agrega ","
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) { // Recorre todas las subredes conocidas
-            String temporalPacket = entry.getKey() + ":" + id + "-"; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
+            String temporalPacket = entry.getKey() + ":" + id; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
             int minimum = this.getMinimumRouteSize(entry.getValue()); // Define el tamaño para la ruta menor
             for (int j = 0; j < entry.getValue().size(); j++) { //Recorre las rutas conocidas hasta encontrar la menor
                 if (minimum == j) {
-                    String route = entry.getValue().get(j);
-                    if (((route.substring(0, 3)).equals(neighbor))) {
-                        if (packet.endsWith(",")) {
-                            packet = packet.substring(0,packet.length()-1);
-                        }
-                        i++;
-                    } else {
-                        temporalPacket += route;
+                    if (entry.getValue().get(j).equals("")) {
                         packet += temporalPacket;
                     }
-                    break;
+                    else {
+                        String route = entry.getValue().get(j);
+                        StringTokenizer stringTokenizer = new StringTokenizer(route, "-");
+                        String routeTest = stringTokenizer.nextToken();
+                        if (routeTest.equals(neighbor)) {
+                            if (packet.endsWith(",")) {
+                                packet = packet.substring(0, packet.length() - 1);
+                            }
+                            i++;
+                        } else {
+                            temporalPacket += "-" + route;
+                            packet += temporalPacket;
+                        }
+                        break;
+                    }
                 }
             }
             if (i < this.routes.size()) { // Si no ha llegado al final, sigue agregando ","
@@ -89,30 +98,23 @@ public class RoutingTable {
     }
 
     public void updateRoute(String route) {
-        try {
-            semaphore.acquire();
-            StringTokenizer tokensRoute = new StringTokenizer(route, ":"); // Tokeniza la ruta
-            if(tokensRoute.hasMoreTokens()){
-                String subnet = tokensRoute.nextToken(); // Guarda la subred de la ruta, ejemplo: 192.168.0.0
-                if(tokensRoute.hasMoreTokens()){
-                    String path = tokensRoute.nextToken(); // Guarda el camino para llegar a la subred con el propio "id", ejemplo: id-AS1-AS2-AS3
-                    if (this.routes.containsKey(subnet)) {  // Si conoce al menos una ruta para la subred
-                        if (!this.routes.get(subnet).contains(path)) { // Si ya conoce la ruta para la subred
-                            this.routes.get(subnet).add(path);
-                        }
-                    } else { // Si no conoce la subred, crea un nuevo ArrayList con su ruta
-                        ArrayList<String> subnetRoutes = new ArrayList<>();
-                        subnetRoutes.add(path);
-                        this.routes.put(subnet, subnetRoutes);
+        StringTokenizer tokensRoute = new StringTokenizer(route, ":"); // Tokeniza la ruta
+        if (tokensRoute.hasMoreTokens()) {
+            String subnet = tokensRoute.nextToken(); // Guarda la subred de la ruta, ejemplo: 192.168.0.0
+            if (tokensRoute.hasMoreTokens()) {
+                String path = tokensRoute.nextToken(); // Guarda el camino para llegar a la subred con el propio "id", ejemplo: id-AS1-AS2-AS3
+                if (this.routes.containsKey(subnet)) {  // Si conoce al menos una ruta para la subred
+                    if (!this.routes.get(subnet).contains(path)) { // Si ya conoce la ruta para la subred
+                        this.routes.get(subnet).add(path);
                     }
+                } else { // Si no conoce la subred, crea un nuevo ArrayList con su ruta
+                    ArrayList<String> subnetRoutes = new ArrayList<>();
+                    subnetRoutes.add(path);
+                    this.routes.put(subnet, subnetRoutes);
                 }
-
             }
-            semaphore.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
+        }
     }
 
     public void showRoutes() {
@@ -123,7 +125,11 @@ public class RoutingTable {
                 if (minimum == i) {
                     System.out.printf("*");
                 }
-                System.out.println("RED " + entry.getKey() + ": " + entry.getValue().get(i));
+                System.out.printf("RED " + entry.getKey() + ": ");
+                if (entry.getValue().get(i).equals("")) {
+                    System.out.println("DIRECTAMENTE CONECTADO");
+                }
+                System.out.println(entry.getValue().get(i));
             }
         }
     }
