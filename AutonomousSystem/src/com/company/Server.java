@@ -26,10 +26,11 @@ public class Server extends Connection implements Runnable{
             System.out.println("\nServidor " + this.routingTable.getId() + " esperando en puerto " + this.port);
             cs = ss.accept();
             System.out.println("Cliente conectado en el servidor " + this.routingTable.getId());
+            /*
             outClient = new DataOutputStream(cs.getOutputStream());
             outClient.flush();
             outClient.writeUTF(routingTable.getUpdatePackage(" ")); // CAMBIAAAAAAAAAAAAR
-
+            */
             BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
 
             //System.out.println(serverMessage);
