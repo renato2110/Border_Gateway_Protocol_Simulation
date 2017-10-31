@@ -13,38 +13,22 @@ public class Controller implements Runnable {
     private RoutingTable routingTable;
     private HashMap<String, String> servers;
     private List<Client> clients;
-    private String file;
-    static Semaphore readFileLock = new Semaphore(1);
 
     public Controller() throws IOException {
-        try {
-            readFileLock.acquire();
-            Scanner scanner = new Scanner(System.in);
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            System.out.flush();
-            System.out.printf("Ingrese la ruta del archivo: ");
-            //this.file = scanner.nextLine();
-            this.file = in.readLine();
-            /*while (scanner.hasNextLine()){
-                System.out.println("hola");
-            }*/
-
-            //file = "/home/vladimir/Escritorio/input.txt";
-            in.mark(0);
-            in.reset();
-
-            readFileLock.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        this.servers = new HashMap<>();
+        this.clients = new ArrayList<>();
+        readInputFile();
     }
 
     private void readInputFile() {
 
         try {
-
-
-            BufferedReader input = new BufferedReader(new FileReader(file));
+            System.out.printf("Ingrese la ruta del archivo: ");
+            Scanner scanner = new Scanner(System.in);
+            String path = scanner.nextLine();
+            System.out.println(path);
+            FileReader fileReader = new FileReader(path);
+            BufferedReader input = new BufferedReader(fileReader);
             input.readLine();
             String reader;
 
@@ -76,7 +60,6 @@ public class Controller implements Runnable {
                                     servers.put(ip, port);
                                     newClient = new Client(this.routingTable, Integer.parseInt(port),ip, "AS2");
                                     System.out.println(newClient.getHOST() +":"+ newClient.getPORT());
-
                                     this.clients.add(newClient);
                                 }
                             }
@@ -125,8 +108,6 @@ public class Controller implements Runnable {
 
     @Override
     public void run() {
-        this.servers = new HashMap<>();
-        this.clients = new ArrayList<>();
         this.readInputFile();
     }
 }
