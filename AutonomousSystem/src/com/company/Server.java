@@ -23,25 +23,34 @@ public class Server extends Connection implements Runnable{
 
             this.initConnection("server", this.port, "localhost");
 
-            System.out.println("\nServidor " + this.routingTable.getId() + " esperando en puerto " + this.port);
+            System.out.println("\nServer " + this.routingTable.getId() + " waiting in the port " + this.port);
             cs = ss.accept();
-            System.out.println("Cliente conectado en el servidor " + this.routingTable.getId());
-            /*
+            System.out.println("Client connected to the server " + this.routingTable.getId());
+
             outClient = new DataOutputStream(cs.getOutputStream());
             outClient.flush();
-            outClient.writeUTF(routingTable.getUpdatePackage(" ")); // CAMBIAAAAAAAAAAAAR
-            */
             BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
 
             //System.out.println(serverMessage);
-            while ((serverMessage = input.readLine()) != null) {
-                System.out.println(serverMessage);
-                routingTable.receiveUpdate(serverMessage);
-                routingTable.showRoutes();
+            while (true) {
+                Thread.sleep(30000);
+                if ((serverMessage = input.readLine()) != null) {
+                    System.out.println(serverMessage);
+                    routingTable.receiveUpdate(serverMessage);
+                    outClient.writeUTF("Hola, amigo");
+                    //outClient.writeUTF(routingTable.getUpdatePackage(" ")); // WARNING
+                    //routingTable.showRoutes();
+                }
+                else {
+                    System.out.println("\nServer " + this.routingTable.getId() + " finished a connection, waiting in the port " + this.port);
+                    ss.close(); // Cuidado
+                    cs = ss.accept();
+                    System.out.println("Client connected to the server " + this.routingTable.getId());
+                }
             }
-            System.out.println("\nServidor " + this.routingTable.getId() + " cerrado");
-            ss.close();
-            routingTable.showRoutes();
+            //System.out.println("\nServidor " + this.routingTable.getId() + " cerrado");
+            //ss.close();
+            //routingTable.showRoutes();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

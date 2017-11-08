@@ -1,8 +1,6 @@
 package com.company;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * Created by Renato & Vladimir on 21/10/2017.
@@ -27,9 +25,18 @@ public class Client extends Connection implements Runnable{
             this.initConnection("client",this.port,this.hostAddress);
             outServer = new DataOutputStream(cs.getOutputStream());
             outServer.flush();
-            outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS)+"\n");
+            BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
+            while (true) {
+                Thread.sleep(30000);
+                outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS) + "\n");
+                serverMessage = input.readLine();
+                System.out.println(serverMessage);
+                // Guarda el mapeo
+            }
             //cs.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
