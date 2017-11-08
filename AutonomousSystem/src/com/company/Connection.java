@@ -22,7 +22,6 @@ public class Connection {
         if (tipo.equalsIgnoreCase("server")) {
 
             ss = new ServerSocket(this.PORT);
-
             cs = new Socket();
         }
         else {

@@ -27,10 +27,16 @@ public class Client extends Connection implements Runnable{
             outServer.flush();
             BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
             while (true) {
-                Thread.sleep(30000);
+                Thread.sleep(3000);
                 outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS) + "\n");
+                outServer.flush();
                 serverMessage = input.readLine();
-                System.out.println(serverMessage);
+                if (serverMessage == null) {
+                    System.out.println("fuck");
+                }
+               // System.out.println(serverMessage);
+               // serverMessage = input.readLine();
+                //System.out.println(serverMessage);
                 // Guarda el mapeo
             }
             //cs.close();

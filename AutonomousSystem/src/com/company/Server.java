@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
  * Created by Renato & Vladimir on 21/10/2017.
  */
 
-public class Server extends Connection implements Runnable{
+public class Server extends Connection implements Runnable {
     private RoutingTable routingTable;
     private int port;
 
@@ -33,15 +33,15 @@ public class Server extends Connection implements Runnable{
 
             //System.out.println(serverMessage);
             while (true) {
-                Thread.sleep(30000);
+                Thread.sleep(3000);
                 if ((serverMessage = input.readLine()) != null) {
                     System.out.println(serverMessage);
                     routingTable.receiveUpdate(serverMessage);
                     outClient.writeUTF("Hola, amigo");
+                    outClient.flush();
                     //outClient.writeUTF(routingTable.getUpdatePackage(" ")); // WARNING
                     //routingTable.showRoutes();
-                }
-                else {
+                } else {
                     System.out.println("\nServer " + this.routingTable.getId() + " finished a connection, waiting in the port " + this.port);
                     ss.close(); // Cuidado
                     cs = ss.accept();
