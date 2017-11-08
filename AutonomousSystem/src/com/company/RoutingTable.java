@@ -46,19 +46,27 @@ public class RoutingTable {
     public void receiveUpdate(String packet) {
         try {
             semaphore.acquire();
-            StringTokenizer tokensPacket = new StringTokenizer(packet, "*");  // Tokeniza el paquete
-            tokensPacket.nextToken(); // Quién es el que envía el paquete
-            String transmitterRoutes = tokensPacket.nextToken(); // Guarda todas las rutas separadas por ","
-            StringTokenizer tokensTransmitterRoutes = new StringTokenizer(transmitterRoutes, ",");  // Tokeniza las rutas separadas por ","
-            while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
-                String updatedRoute = tokensTransmitterRoutes.nextToken();
-                this.updateRoute(updatedRoute);
+            try {
+
+                StringTokenizer tokensPacket = new StringTokenizer(packet, "*");  // Tokeniza el paquete
+                tokensPacket.nextToken(); // Quién es el que envía el paquete
+                String transmitterRoutes = tokensPacket.nextToken(); // Guarda todas las rutas separadas por ","
+                StringTokenizer tokensTransmitterRoutes = new StringTokenizer(transmitterRoutes, ",");  // Tokeniza las rutas separadas por ","
+                while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
+                    String updatedRoute = tokensTransmitterRoutes.nextToken();
+                    this.updateRoute(updatedRoute);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error in receiveUpdate");
+            }finally {
+                semaphore.release();
             }
-            semaphore.release();
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
-            System.out.println("Errorcito en receiveUpdate");
         }
+
     }
 
     public String getUpdatePackage(String neighbor) { // Uso del socket, forman el String para enviar

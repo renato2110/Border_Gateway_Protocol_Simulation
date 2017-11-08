@@ -7,9 +7,12 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-
+        //Menu menu = new Menu();
+        //new Menu().showMenu();
         Controller controller = new Controller();
         (new Thread(controller)).start();
+        /*System.out.println(System.getProperty("user.dir"));
+        System.out.println(System.getProperty("os.name"));*/
 
         /*RoutingTable routingTable = new RoutingTable("AS9");
         routingTable.receiveUpdate("AS1*192.168.0.0:AS1-AS2-AS3,10.0.0.0:AS1-AS3,192.168.0.0:AS2-AS8,192.168.0.0:AS2-AS8,10.0.0.0:AS4-AS6");
