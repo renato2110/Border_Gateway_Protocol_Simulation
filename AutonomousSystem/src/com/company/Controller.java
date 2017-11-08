@@ -94,6 +94,10 @@ public class Controller implements Runnable {
         this.routingTable.showRoutes();
     }
 
+    public void addSubnet(String subnet){
+        this.routingTable.addSubnet(subnet);
+    }
+
     public void startServers(){
         for(Server s : listeningServers){
             (new Thread(s)).start();
