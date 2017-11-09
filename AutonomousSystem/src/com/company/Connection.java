@@ -7,14 +7,18 @@ import java.net.*;
 /**
  * Created by Renato & Vladimir on 21/10/2017.
  */
-public class Connection {
+public abstract class Connection {
     protected int PORT;
     protected String HOST;
     protected String serverMessage;
     protected ServerSocket ss;
     protected Socket cs;
     protected DataOutputStream outServer, outClient;
+    protected boolean active;
 
+    public Connection(){
+        this.active = true;
+    }
 
     public void initConnection(String tipo, int PORT, String HOST) throws IOException{
         this.PORT = PORT;
@@ -28,26 +32,39 @@ public class Connection {
             //InetAddress inetAddress = new Inet4Address(HOST);
             boolean connected = false;
 
-            while (!connected){
+            while (!connected && active){
                 try {
                     InetAddress inetAddress =InetAddress.getByName(HOST);
                     cs = new Socket(inetAddress,PORT);
 
                 }catch (ConnectException e){
                     System.out.println("No hay conexión al servidor: " + HOST + ":" + PORT);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException s) {
+                        s.printStackTrace();
+                    }
                 }
                 if(cs != null){
                     connected = true;
                 }
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
 
             //System.out.println("HOST: " + HOST + " PORT: " + PORT);
+        }
+    }
+
+    public void stop(){
+        try {
+            this.active = false;
+            if(cs!=null && !cs.isClosed()){
+                cs.close();
+            }
+            if(ss != null && !ss.isClosed()){
+                ss.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

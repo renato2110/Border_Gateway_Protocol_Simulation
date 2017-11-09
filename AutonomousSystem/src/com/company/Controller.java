@@ -104,14 +104,23 @@ public class Controller implements Runnable {
         }
     }
 
-    public void stopServer(){
+    public void stopServers(){
         this.routingTable.resetRoutingTable();
+        for(Server s : listeningServers){
+            s.stop();
+        }
         servers.clear();
+    }
+
+    public void stopClients(){
+        for(Client c : this.clients){
+            c.stop();
+        }
     }
 
 
     @Override
     public void run() {
-        this.readInputFile();
+        //this.readInputFile();
     }
 }

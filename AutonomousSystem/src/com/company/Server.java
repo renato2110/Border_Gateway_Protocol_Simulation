@@ -24,6 +24,7 @@ public class Server extends Connection implements Runnable {
             this.initConnection("server", this.port, "localhost");
 
             System.out.println("\nServer " + this.routingTable.getId() + " waiting in the port " + this.port);
+            System.out.println("Llega");
             cs = ss.accept();
             System.out.println("Client connected to the server " + this.routingTable.getId());
 
@@ -32,11 +33,12 @@ public class Server extends Connection implements Runnable {
             BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
 
             //System.out.println(serverMessage);
-            while (true) {
+            while (this.active) {
                 Thread.sleep(3000);
                 if ((serverMessage = input.readLine()) != null) {
                     System.out.println(serverMessage);
                     routingTable.receiveUpdate(serverMessage);
+                    outClient.flush();
                     outClient.writeUTF("Hola, amigo");
                     outClient.flush();
                     //outClient.writeUTF(routingTable.getUpdatePackage(" ")); // WARNING
@@ -47,7 +49,9 @@ public class Server extends Connection implements Runnable {
                     cs = ss.accept();
                     System.out.println("Client connected to the server " + this.routingTable.getId());
                 }
+                System.out.println("holis");
             }
+            System.out.println("Salió!!");
             //System.out.println("\nServidor " + this.routingTable.getId() + " cerrado");
             //ss.close();
             //routingTable.showRoutes();
@@ -56,7 +60,8 @@ public class Server extends Connection implements Runnable {
         }
     }
 
-    @Override
+
+
     public void run() {
         this.startServer();
     }

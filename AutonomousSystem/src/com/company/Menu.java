@@ -39,7 +39,8 @@ public class Menu {
                     case "2":
                         System.out.println("Stopping router");
                         if(isRunningRouter){
-                            this.router.stopServer();
+                            this.router.stopClients();
+                            this.router.stopServers();
                         }else {
                             System.out.println("The router is not running");
                         }

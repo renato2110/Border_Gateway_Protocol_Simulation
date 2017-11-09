@@ -11,6 +11,7 @@ public class Client extends Connection implements Runnable{
     private String hostAddress;
     private String AS;
 
+
     public  Client(RoutingTable routingTable, int port, String host, String AS) throws IOException {
         this.routingTable = routingTable;
         this.port = port;
@@ -23,21 +24,23 @@ public class Client extends Connection implements Runnable{
     public void startClient(){
         try {
             this.initConnection("client",this.port,this.hostAddress);
-            outServer = new DataOutputStream(cs.getOutputStream());
-            outServer.flush();
-            BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
-            while (true) {
-                Thread.sleep(3000);
-                outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS) + "\n");
+            if(cs!=null && !cs.isClosed()){
+                outServer = new DataOutputStream(cs.getOutputStream());
                 outServer.flush();
-                serverMessage = input.readLine();
-                if (serverMessage == null) {
-                    System.out.println("fuck");
+                BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
+                while (this.active) {
+                    Thread.sleep(3000);
+                    outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS) + "\n");
+                    outServer.flush();
+                    serverMessage = input.readLine();
+                    if (serverMessage == null) {
+                        System.out.println("fuck");
+                    }
+                    // System.out.println(serverMessage);
+                    // serverMessage = input.readLine();
+                    //System.out.println(serverMessage);
+                    // Guarda el mapeo
                 }
-               // System.out.println(serverMessage);
-               // serverMessage = input.readLine();
-                //System.out.println(serverMessage);
-                // Guarda el mapeo
             }
             //cs.close();
         } catch (IOException e) {

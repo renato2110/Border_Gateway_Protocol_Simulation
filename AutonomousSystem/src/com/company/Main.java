@@ -8,10 +8,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         //Menu menu = new Menu();
-        //new Menu().showMenu();
-        Controller controller = new Controller();
+        new Menu().showMenu();
+        /*Controller controller = new Controller();
         (new Thread(controller)).start();
-        /*System.out.println(System.getProperty("user.dir"));
+        *//*System.out.println(System.getProperty("user.dir"));
         System.out.println(System.getProperty("os.name"));*/
 
         /*RoutingTable routingTable = new RoutingTable("AS9");
