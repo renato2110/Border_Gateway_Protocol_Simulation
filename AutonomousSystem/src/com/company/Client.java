@@ -9,7 +9,7 @@ public class Client extends Connection implements Runnable{
     private RoutingTable routingTable;
     private int port;
     private String hostAddress;
-    private String AS;
+
 
 
     public  Client(RoutingTable routingTable, int port, String host) throws IOException {
@@ -24,14 +24,12 @@ public class Client extends Connection implements Runnable{
         try {
             this.initConnection("client",this.port,this.hostAddress);
             if(this.cs!=null && !this.cs.isClosed()){
-                cs.getOutputStream().flush();
                 this.outServer = new DataOutputStream(cs.getOutputStream());
                 this.outServer.flush();
                 DataInputStream input = new DataInputStream(cs.getInputStream());
                 while (this.active) {
-                    Thread.sleep(3000);
-                    System.out.println("Enviando al servidor: " + this.routingTable.getUpdatePackage(this.AS));
-                    this.outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS) + "\n");
+                    System.out.println("Enviando al servidor: " + this.routingTable.getUpdatePackage(this.connectedAS));
+                    this.outServer.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS) + "\n");
                     this.outServer.flush();
                     this.serverMessage = input.readUTF();
                     if (this.serverMessage == null) {
@@ -39,6 +37,8 @@ public class Client extends Connection implements Runnable{
                     }else {
                         System.out.println("Server message: " + this.serverMessage);
                     }
+
+                    Thread.sleep(3000);
                     // System.out.println(serverMessage);
                     // serverMessage = input.readLine();
                     //System.out.println(serverMessage);

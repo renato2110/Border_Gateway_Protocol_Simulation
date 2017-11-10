@@ -14,7 +14,7 @@ public abstract class Connection {
     protected ServerSocket ss;
     protected Socket cs;
     protected DataOutputStream outServer, outClient;
-    private String connectedAS;
+    protected String connectedAS;
     protected boolean active;
 
     public Connection(){
