@@ -5,28 +5,24 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 /**
- * Created by Renato on 22/10/2017.
+ * Created by Vladimir & Renato on 22/10/2017.
  */
-public class Controller implements Runnable {
+public class Controller{
 
     private List<Server> listeningServers;
     private RoutingTable routingTable;
     private HashMap<String, String> servers;
     private List<Client> clients;
 
-    public Controller() throws IOException {
+    public Controller(String path) throws IOException {
         this.servers = new HashMap<>();
         this.clients = new ArrayList<>();
-        readInputFile();
+        this.readInputFile(path);
     }
 
-    private void readInputFile() {
+    private void readInputFile(String path) {
 
         try {
-            System.out.printf("Ingrese la ruta del archivo: ");
-            Scanner scanner = new Scanner(System.in);
-            String path = scanner.nextLine();
-            System.out.println(path);
             FileReader fileReader = new FileReader(path);
             BufferedReader input = new BufferedReader(fileReader);
             input.readLine();
@@ -58,7 +54,7 @@ public class Controller implements Runnable {
                                 if(stringTokenizer.hasMoreTokens()){
                                     port = stringTokenizer.nextToken();
                                     servers.put(ip, port);
-                                    newClient = new Client(this.routingTable, Integer.parseInt(port),ip, "AS2");
+                                    newClient = new Client(this.routingTable, Integer.parseInt(port),ip);
                                     System.out.println(newClient.getHOST() +":"+ newClient.getPORT());
                                     this.clients.add(newClient);
                                 }
@@ -77,9 +73,8 @@ public class Controller implements Runnable {
             }
 
             this.startServers();
-            for(Client c : this.clients){
-                (new Thread(c)).start();
-            }
+            this.startClients();
+
         } catch (FileNotFoundException e) {
             System.out.println("Archivo no valido");
             System.exit(0);
@@ -112,6 +107,12 @@ public class Controller implements Runnable {
         servers.clear();
     }
 
+    public void startClients(){
+        for(Client c : this.clients){
+            (new Thread(c)).start();
+        }
+    }
+
     public void stopClients(){
         for(Client c : this.clients){
             c.stop();
@@ -119,8 +120,4 @@ public class Controller implements Runnable {
     }
 
 
-    @Override
-    public void run() {
-        //this.readInputFile();
-    }
 }

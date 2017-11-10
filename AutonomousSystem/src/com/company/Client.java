@@ -12,11 +12,10 @@ public class Client extends Connection implements Runnable{
     private String AS;
 
 
-    public  Client(RoutingTable routingTable, int port, String host, String AS) throws IOException {
+    public  Client(RoutingTable routingTable, int port, String host) throws IOException {
         this.routingTable = routingTable;
         this.port = port;
         this.hostAddress= host;
-        this.AS = AS;
         this.PORT = port;
         this.HOST = host;
     }
@@ -24,17 +23,19 @@ public class Client extends Connection implements Runnable{
     public void startClient(){
         try {
             this.initConnection("client",this.port,this.hostAddress);
-            if(cs!=null && !cs.isClosed()){
-                outServer = new DataOutputStream(cs.getOutputStream());
-                outServer.flush();
+            if(this.cs!=null && !this.cs.isClosed()){
+                this.outServer = new DataOutputStream(cs.getOutputStream());
+                this.outServer.flush();
                 BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
                 while (this.active) {
                     Thread.sleep(3000);
-                    outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS) + "\n");
-                    outServer.flush();
-                    serverMessage = input.readLine();
-                    if (serverMessage == null) {
-                        System.out.println("fuck");
+                    this.outServer.writeUTF(this.routingTable.getUpdatePackage(this.AS) + "\n");
+                    this.outServer.flush();
+                    this.serverMessage = input.readLine();
+                    if (this.serverMessage == null) {
+                        System.out.println("Lost connection");
+                    }else {
+                        System.out.println("Server message: " + this.serverMessage);
                     }
                     // System.out.println(serverMessage);
                     // serverMessage = input.readLine();

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Menu {
-    private Thread runningRouter;
     private Controller router;
 
     public void showMenu() {
@@ -12,6 +11,7 @@ public class Menu {
             Scanner sc = new Scanner(System.in);
             String option;
             String subnet;
+            String path;
             boolean contExecution = true;
             boolean isRunningRouter = false;
             while (contExecution) {
@@ -28,10 +28,10 @@ public class Menu {
                     case "1":
                         System.out.println("Starting router");
                         if(!isRunningRouter){
+                            System.out.printf("Insert the file name: ");
+                            path = sc.nextLine();
+                            this.router = new Controller(path);
                             isRunningRouter = true;
-                            this.router = new Controller();
-                            runningRouter = new Thread(router);
-                            runningRouter.start();
                         }else{
                             System.out.println("The router is running");
                         }

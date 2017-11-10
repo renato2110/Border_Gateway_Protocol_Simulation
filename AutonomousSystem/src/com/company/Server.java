@@ -27,7 +27,7 @@ public class Server extends Connection implements Runnable {
             System.out.println("Llega");
             cs = ss.accept();
             System.out.println("Client connected to the server " + this.routingTable.getId());
-
+            cs.getOutputStream().flush();
             outClient = new DataOutputStream(cs.getOutputStream());
             outClient.flush();
             BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
@@ -49,7 +49,6 @@ public class Server extends Connection implements Runnable {
                     cs = ss.accept();
                     System.out.println("Client connected to the server " + this.routingTable.getId());
                 }
-                System.out.println("holis");
             }
             System.out.println("Salió!!");
             //System.out.println("\nServidor " + this.routingTable.getId() + " cerrado");
