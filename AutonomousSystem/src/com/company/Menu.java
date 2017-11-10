@@ -15,7 +15,7 @@ public class Menu {
             boolean contExecution = true;
             boolean isRunningRouter = false;
             while (contExecution) {
-                System.out.println("Select an option:");
+                System.out.println("\nSelect an option:");
                 System.out.println("1. Start router");
                 System.out.println("2. Stop router");
                 System.out.println("3. Add subnet");

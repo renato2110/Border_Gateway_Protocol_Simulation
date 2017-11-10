@@ -16,6 +16,7 @@ public class Server extends Connection implements Runnable {
     public Server(RoutingTable routingTable, int PORT) throws IOException {
         this.port = PORT;
         this.routingTable = routingTable;
+        this.connectedAS = "";
     }
 
     public void startServer() {

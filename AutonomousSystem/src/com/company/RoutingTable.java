@@ -23,9 +23,11 @@ public class RoutingTable {
     }
 
     public void addSubnet(String subnet) {
-        ArrayList<String> subnetRoutes = new ArrayList<>();
-        subnetRoutes.add("");
-        routes.put(subnet, subnetRoutes); // Agrega una ruta directamente conectada
+        if (!routes.containsKey(subnet)) {
+            ArrayList<String> subnetRoutes = new ArrayList<>();
+            subnetRoutes.add("");
+            routes.put(subnet, subnetRoutes); // Agrega una ruta directamente conectada
+        }
     }
 
     public void deleteSubnet(String subnet, String AS) {
@@ -87,9 +89,7 @@ public class RoutingTable {
                         }
                         else {
                             String route = entry.getValue().get(j);
-                            StringTokenizer stringTokenizer = new StringTokenizer(route, "-");
-                            String routeTest = stringTokenizer.nextToken();
-                            if (!routeTest.equals(neighbor)) {
+                            if (!route.contains(neighbor)) {
                                 temporalPacket += "-" + route;
                                 packet += temporalPacket + ",";
                             }
@@ -127,16 +127,16 @@ public class RoutingTable {
     }
 
     public void showRoutes() {
-        System.out.println("\nRutas conocidas por " + this.id + ":\n");
+        System.out.println("\nKnowledge routes by " + this.id + ":\n");
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             int minimum = this.getMinimumRouteSize(entry.getValue());
             for (int i = 0; i < entry.getValue().size(); i++) {
                 if (minimum == i) {
                     System.out.printf("*");
                 }
-                System.out.printf("RED " + entry.getKey() + ": ");
+                System.out.printf("SUBNET " + entry.getKey() + ": ");
                 if (entry.getValue().get(i).equals("")) {
-                    System.out.println("DIRECTAMENTE CONECTADO");
+                    System.out.println("DIRECTLY CONNECTED");
                 }else{
                     System.out.println(entry.getValue().get(i));
                 }

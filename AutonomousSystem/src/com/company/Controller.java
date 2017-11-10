@@ -54,7 +54,6 @@ public class Controller{
                                     port = stringTokenizer.nextToken();
                                     servers.put(ip, port);
                                     newClient = new Client(this.routingTable, Integer.parseInt(port),ip);
-                                    System.out.println(newClient.getHOST() +":"+ newClient.getPORT());
                                     this.clients.add(newClient);
                                 }
                             }

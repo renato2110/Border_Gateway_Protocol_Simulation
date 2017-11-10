@@ -18,6 +18,7 @@ public class Client extends Connection implements Runnable{
         this.hostAddress= host;
         this.PORT = port;
         this.HOST = host;
+        this.connectedAS = "";
     }
 
     public void startClient(){
@@ -34,6 +35,7 @@ public class Client extends Connection implements Runnable{
                         System.out.println("Lost connection");
                     }else {
                         System.out.println("Server message: " + this.serverMessage);
+                        this.connectedAS = serverMessage.split("\\*")[0];
                         this.routingTable.receiveUpdate(this.serverMessage);
                         this.routingTable.showRoutes();
                     }
