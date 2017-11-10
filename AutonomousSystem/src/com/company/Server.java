@@ -37,6 +37,8 @@ public class Server extends Connection implements Runnable {
                 Thread.sleep(3000);
                 if ((serverMessage = input.readUTF()) != null) {
                     System.out.println("Received Message: " + serverMessage);
+                    this.connectedAS = serverMessage.split("\\*")[0];
+                    System.out.println("Connected to AS: " + this.connectedAS);
                     routingTable.receiveUpdate(serverMessage);
                     outClient.writeUTF("Hola, amigo");
                     outClient.flush();

@@ -55,9 +55,10 @@ public class RoutingTable {
                 String updatedRoute;
                 while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
                     updatedRoute = tokensTransmitterRoutes.nextToken();
-                    if(updatedRoute.contains(this.id)){
+                    if(!updatedRoute.contains(this.id)){
                         this.updateRoute(updatedRoute);
                     }
+
                 }
 
             } catch (Exception e) {
