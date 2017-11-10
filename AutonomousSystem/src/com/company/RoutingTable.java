@@ -55,8 +55,9 @@ public class RoutingTable {
                 String updatedRoute;
                 while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
                     updatedRoute = tokensTransmitterRoutes.nextToken();
-                    System.out.println("Ruta actualizada: " + updatedRoute);
-                    this.updateRoute(updatedRoute);
+                    if(updatedRoute.contains(this.id)){
+                        this.updateRoute(updatedRoute);
+                    }
                 }
 
             } catch (Exception e) {
@@ -75,8 +76,6 @@ public class RoutingTable {
         String packet = this.id + "*";
         int i = 1; // Utilizado para saber cuando se dejan de agrega ","
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) { // Recorre todas las subredes conocidas
-            if(!neighbor.equals("") && !entry.getValue().contains(neighbor)){
-
                 String temporalPacket = entry.getKey() + ":" + id; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
                 int minimum = this.getMinimumRouteSize(entry.getValue()); // Define el tamaño para la ruta menor
                 for (int j = 0; j < entry.getValue().size(); j++) { //Recorre las rutas conocidas hasta encontrar la menor
@@ -106,7 +105,6 @@ public class RoutingTable {
                 }
                 i++;
             }
-        }
 
         return packet;
     }
