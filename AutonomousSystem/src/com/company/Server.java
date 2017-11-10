@@ -1,9 +1,6 @@
 package com.company;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
  * Created by Renato & Vladimir on 21/10/2017.
@@ -25,18 +22,19 @@ public class Server extends Connection implements Runnable {
 
             System.out.println("\nServer " + this.routingTable.getId() + " waiting in the port " + this.port);
             System.out.println("Llega");
+            //ss.accept().getOutputStream().flush();
             cs = ss.accept();
             System.out.println("Client connected to the server " + this.routingTable.getId());
-            cs.getOutputStream().flush();
+            //cs.getOutputStream().flush();
             outClient = new DataOutputStream(cs.getOutputStream());
             outClient.flush();
-            BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
+            DataInputStream input = new DataInputStream(cs.getInputStream());
 
             //System.out.println(serverMessage);
             while (this.active) {
                 Thread.sleep(3000);
-                if ((serverMessage = input.readLine()) != null) {
-                    System.out.println(serverMessage);
+                if ((serverMessage = input.readUTF()) != null) {
+                    System.out.println("PILI: " + serverMessage);
                     routingTable.receiveUpdate(serverMessage);
                     outClient.flush();
                     outClient.writeUTF("Hola, amigo");
