@@ -34,7 +34,7 @@ public class Server extends Connection implements Runnable {
 
             //System.out.println(serverMessage);
             while (this.active) {
-                Thread.sleep(3000);
+                Thread.sleep(10000);
                 if ((serverMessage = input.readUTF()) != null) {
                     System.out.println("Received Message: " + serverMessage);
                     this.connectedAS = serverMessage.split("\\*")[0];

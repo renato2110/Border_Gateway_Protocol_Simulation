@@ -8,8 +8,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         //Menu menu = new Menu();
-        //new Menu().showMenu();
-        Controller controller = new Controller("/home/vladimir/Escritorio/input2.txt");
+        new Menu().showMenu();
+        //Controller controller = new Controller("/home/vladimir/Escritorio/input2.txt");
 
         /*System.out.println(System.getProperty("user.dir"));
         System.out.println(System.getProperty("os.name"));*/

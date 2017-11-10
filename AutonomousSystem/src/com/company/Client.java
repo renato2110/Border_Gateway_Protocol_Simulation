@@ -38,7 +38,7 @@ public class Client extends Connection implements Runnable{
                         this.routingTable.showRoutes();
                     }
 
-                    Thread.sleep(3000);
+                    Thread.sleep(10000);
                     // System.out.println(serverMessage);
                     // serverMessage = input.readLine();
                     //System.out.println(serverMessage);
