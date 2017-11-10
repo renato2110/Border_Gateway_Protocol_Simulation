@@ -28,14 +28,14 @@ public class Client extends Connection implements Runnable{
                 DataInputStream input = new DataInputStream(cs.getInputStream());
                 while (this.active) {
                     System.out.println("Enviando al servidor: " + this.routingTable.getUpdatePackage(this.connectedAS));
-                    this.outServer.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS) + "\n");
-                    System.out.println("Hola");
+                    this.outServer.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS));
                     this.serverMessage = input.readUTF();
-                    System.out.println("Chaito");
                     if (this.serverMessage == null) {
                         System.out.println("Lost connection");
                     }else {
                         System.out.println("Server message: " + this.serverMessage);
+                        this.routingTable.receiveUpdate(this.serverMessage);
+                        this.routingTable.showRoutes();
                     }
 
                     Thread.sleep(3000);
@@ -47,16 +47,11 @@ public class Client extends Connection implements Runnable{
             }
             //cs.close();
         } catch (Exception e) {
-            e.printStackTrace();
             this.stop(); //Mandar a la bitácora
             this.cs = null;
             this.outServer = null;
-            try {
-                this.initConnection("client",this.port,this.hostAddress);
-                this.startClient();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            this.startClient();
+
             //e.printStackTrace();
         }
     }

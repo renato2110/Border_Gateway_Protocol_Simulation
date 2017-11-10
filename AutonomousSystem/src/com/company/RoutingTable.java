@@ -141,8 +141,10 @@ public class RoutingTable {
                 System.out.printf("RED " + entry.getKey() + ": ");
                 if (entry.getValue().get(i).equals("")) {
                     System.out.println("DIRECTAMENTE CONECTADO");
+                }else{
+                    System.out.println(entry.getValue().get(i));
                 }
-                System.out.println(entry.getValue().get(i));
+
             }
         }
     }
