@@ -50,7 +50,6 @@ public class Controller{
                             stringTokenizer = new StringTokenizer(reader, ":");
                             if(stringTokenizer.hasMoreTokens()){
                                 ip = stringTokenizer.nextToken();
-
                                 if(stringTokenizer.hasMoreTokens()){
                                     port = stringTokenizer.nextToken();
                                     servers.put(ip, port);

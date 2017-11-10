@@ -14,6 +14,7 @@ public abstract class Connection {
     protected ServerSocket ss;
     protected Socket cs;
     protected DataOutputStream outServer, outClient;
+    private String connectedAS;
     protected boolean active;
 
     public Connection(){
@@ -29,7 +30,6 @@ public abstract class Connection {
             cs = new Socket();
         }
         else {
-            //InetAddress inetAddress = new Inet4Address(HOST);
             boolean connected = false;
 
             while (!connected && active){
@@ -38,7 +38,7 @@ public abstract class Connection {
                     cs = new Socket(inetAddress,PORT);
 
                 }catch (ConnectException e){
-                    System.out.println("No hay conexión al servidor: " + HOST + ":" + PORT);
+                    System.out.println("There is no connection to server: " + HOST + ":" + PORT);
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException s) {
@@ -50,7 +50,6 @@ public abstract class Connection {
                 }
             }
 
-            //System.out.println("HOST: " + HOST + " PORT: " + PORT);
         }
     }
 
