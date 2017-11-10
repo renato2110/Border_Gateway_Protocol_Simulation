@@ -77,35 +77,32 @@ public class RoutingTable {
         String packet = this.id + "*";
         int i = 1; // Utilizado para saber cuando se dejan de agrega ","
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) { // Recorre todas las subredes conocidas
+            System.out.println("REDES CONOCIDAS: " + entry.getKey());
                 String temporalPacket = entry.getKey() + ":" + id; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
                 int minimum = this.getMinimumRouteSize(entry.getValue()); // Define el tamaño para la ruta menor
                 for (int j = 0; j < entry.getValue().size(); j++) { //Recorre las rutas conocidas hasta encontrar la menor
                     if (minimum == j) {
                         if (entry.getValue().get(j).equals("")) {
-                            packet += temporalPacket;
+                            packet += temporalPacket + ",";
                         }
                         else {
                             String route = entry.getValue().get(j);
                             StringTokenizer stringTokenizer = new StringTokenizer(route, "-");
                             String routeTest = stringTokenizer.nextToken();
-                            if (routeTest.equals(neighbor)) {
-                                if (packet.endsWith(",")) {
-                                    packet = packet.substring(0, packet.length() - 1);
-                                }
-                                i++;
-                            } else {
+                            if (!routeTest.equals(neighbor)) {
                                 temporalPacket += "-" + route;
-                                packet += temporalPacket;
+                                packet += temporalPacket + ",";
                             }
                             break;
                         }
+                        System.out.println("Paquete: " + packet);
                     }
                 }
-                if (i < this.routes.size()) { // Si no ha llegado al final, sigue agregando ","
-                    packet += ",";
-                }
-                i++;
+
             }
+        if (packet.endsWith(",")) {
+            packet = packet.substring(0, packet.length() - 1);
+        }
 
         return packet;
     }

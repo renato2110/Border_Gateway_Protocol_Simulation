@@ -24,6 +24,7 @@ public abstract class Connection {
     public void initConnection(String tipo, int PORT, String HOST) throws IOException{
         this.PORT = PORT;
         this.HOST = HOST;
+        this.active = true;
         if (tipo.equalsIgnoreCase("server")) {
 
             ss = new ServerSocket(this.PORT);
@@ -31,7 +32,7 @@ public abstract class Connection {
         }
         else {
             boolean connected = false;
-            this.active = true;
+
             while (!connected && active){
                 try {
                     InetAddress inetAddress =InetAddress.getByName(HOST);

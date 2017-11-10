@@ -40,7 +40,7 @@ public class Server extends Connection implements Runnable {
                     this.connectedAS = serverMessage.split("\\*")[0];
                     System.out.println("Connected to AS: " + this.connectedAS);
                     routingTable.receiveUpdate(serverMessage);
-                    outClient.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS));
+                    outClient.writeUTF(this.routingTable.getUpdatePackage(""/*this.connectedAS*/));
                     routingTable.showRoutes();
                     outClient.flush();
                 } else {
@@ -51,7 +51,12 @@ public class Server extends Connection implements Runnable {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            this.stop();
+            this.cs = null;
+            this.ss = null;
+            this.outClient =null;
+            this.startServer();
         }
     }
 
