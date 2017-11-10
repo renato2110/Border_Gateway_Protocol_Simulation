@@ -41,6 +41,7 @@ public class Server extends Connection implements Runnable {
                     System.out.println("Connected to AS: " + this.connectedAS);
                     routingTable.receiveUpdate(serverMessage);
                     outClient.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS));
+                    routingTable.showRoutes();
                     outClient.flush();
                 } else {
                     System.out.println("\nServer " + this.routingTable.getId() + " finished a connection, waiting in the port " + this.port);
@@ -50,7 +51,7 @@ public class Server extends Connection implements Runnable {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
