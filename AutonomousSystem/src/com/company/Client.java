@@ -25,13 +25,13 @@ public class Client extends Connection implements Runnable{
             this.initConnection("client",this.port,this.hostAddress);
             if(this.cs!=null && !this.cs.isClosed()){
                 this.outServer = new DataOutputStream(cs.getOutputStream());
-                this.outServer.flush();
                 DataInputStream input = new DataInputStream(cs.getInputStream());
                 while (this.active) {
                     System.out.println("Enviando al servidor: " + this.routingTable.getUpdatePackage(this.connectedAS));
                     this.outServer.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS) + "\n");
-                    this.outServer.flush();
+                    System.out.println("Hola");
                     this.serverMessage = input.readUTF();
+                    System.out.println("Chaito");
                     if (this.serverMessage == null) {
                         System.out.println("Lost connection");
                     }else {
@@ -46,10 +46,18 @@ public class Client extends Connection implements Runnable{
                 }
             }
             //cs.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            this.stop(); //Mandar a la bitácora
+            this.cs = null;
+            this.outServer = null;
+            try {
+                this.initConnection("client",this.port,this.hostAddress);
+                this.startClient();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            //e.printStackTrace();
         }
     }
 

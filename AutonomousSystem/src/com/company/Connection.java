@@ -31,7 +31,7 @@ public abstract class Connection {
         }
         else {
             boolean connected = false;
-
+            this.active = true;
             while (!connected && active){
                 try {
                     InetAddress inetAddress =InetAddress.getByName(HOST);
