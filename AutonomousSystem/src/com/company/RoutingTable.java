@@ -1,6 +1,5 @@
 package com.company;
 
-
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
@@ -78,7 +77,6 @@ public class RoutingTable {
 
     public synchronized String getUpdatePackage(String neighbor) { // Uso del socket, forman el String para enviar
         String packet = this.id + "*";
-        int i = 1; // Utilizado para saber cuando se dejan de agrega ","
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) { // Recorre todas las subredes conocidas
 
                 String temporalPacket = entry.getKey() + ":" + id; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
