@@ -31,15 +31,19 @@ public class RoutingTable {
     }
 
     public synchronized void cleanASRoutes(String AS) {
+        ArrayList deleteRoutes = new ArrayList(); // Utilizado para almacenar las subredes que quedan sin rutas, para una eliminación posterior
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             for (int i = 0; i < entry.getValue().size(); i++) {
                 if ((entry.getValue().get(i)).contains(AS)) {
                     entry.getValue().remove(entry.getValue().get(i));
                 }
-                if (entry.getValue().isEmpty()){
-                    routes.remove(entry.getKey());
-                }
             }
+            if (entry.getValue().isEmpty()){ // Se almacenan las subredes, ya que si se eliminan de una vez se presenta un error en el ciclo
+                deleteRoutes.add(entry.getKey());
+            }
+        }
+        for (int i = 0; i < deleteRoutes.size(); i++) { // Se eliminan las subredes sin rutas
+            this.routes.remove(deleteRoutes.get(i));
         }
     }
 
