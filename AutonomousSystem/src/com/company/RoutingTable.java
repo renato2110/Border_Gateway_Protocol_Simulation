@@ -33,19 +33,6 @@ public class RoutingTable {
     public synchronized void cleanASRoutes(String AS) {
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             for (int i = 0; i < entry.getValue().size(); i++) {
-                if ((entry.getValue().get(i)).startsWith(AS)) {
-                    entry.getValue().remove(entry.getValue().get(i));
-                }
-                if (entry.getValue().isEmpty()){
-                    routes.remove(entry.getKey());
-                }
-            }
-        }
-    }
-
-    public synchronized void deleteAS(String AS){
-        for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
-            for (int i = 0; i < entry.getValue().size(); i++) {
                 if ((entry.getValue().get(i)).contains(AS)) {
                     entry.getValue().remove(entry.getValue().get(i));
                 }

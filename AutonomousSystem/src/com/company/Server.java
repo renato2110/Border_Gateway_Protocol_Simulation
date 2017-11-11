@@ -35,7 +35,7 @@ public class Server extends Connection implements Runnable {
             while (this.active) {
                 Thread.sleep(10000);
                 if ((serverMessage = input.readUTF()) != null) {
-                    System.out.println("Received Message: " + serverMessage);
+                    System.out.println("\nReceived Message: " + serverMessage);
                     this.connectedAS = serverMessage.split("\\*")[0];
                     System.out.println("Connected to AS: " + this.connectedAS);
                     routingTable.receiveUpdate(serverMessage);
@@ -45,7 +45,7 @@ public class Server extends Connection implements Runnable {
                 } else {
                     System.out.println("\nServer " + this.routingTable.getId() + " finished a connection, waiting in the port " + this.port);
                     ss.close();
-                    this.routingTable.deleteAS(this.connectedAS);
+                    this.routingTable.cleanASRoutes(this.connectedAS);
                     this.connectedAS = "";
                     cs = ss.accept();
                     System.out.println("Client connected to the server " + this.routingTable.getId());
