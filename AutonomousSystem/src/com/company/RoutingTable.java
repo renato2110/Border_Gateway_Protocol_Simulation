@@ -22,7 +22,7 @@ public class RoutingTable {
         return id;
     }
 
-    public void addSubnet(String subnet) {
+    public synchronized void addSubnet(String subnet) {
         if (!routes.containsKey(subnet)) {
             ArrayList<String> subnetRoutes = new ArrayList<>();
             subnetRoutes.add("");
@@ -30,52 +30,62 @@ public class RoutingTable {
         }
     }
 
-    public void deleteSubnet(String subnet, String AS) {
-        this.routes.remove(subnet);
+    public synchronized void cleanASRoutes(String AS) {
+        for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
+            for (int i = 0; i < entry.getValue().size(); i++) {
+                if ((entry.getValue().get(i)).startsWith(AS)) {
+                    entry.getValue().remove(entry.getValue().get(i));
+                }
+                if (entry.getValue().isEmpty()){
+                    routes.remove(entry.getKey());
+                }
+            }
+        }
+    }
+
+    public synchronized void deleteAS(String AS){
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             for (int i = 0; i < entry.getValue().size(); i++) {
                 if ((entry.getValue().get(i)).contains(AS)) {
                     entry.getValue().remove(entry.getValue().get(i));
                 }
+                if (entry.getValue().isEmpty()){
+                    routes.remove(entry.getKey());
+                }
             }
         }
     }
 
-    public void resetRoutingTable() {
+    public synchronized void resetRoutingTable() {
         this.routes.clear(); // Cuando se apaga el enrutador y se deben borrar las rutas conocidas
     }
 
-    public void receiveUpdate(String packet) {
-        try {
-            semaphore.acquire();
+    public synchronized void receiveUpdate(String packet) {
             try {
 
                 StringTokenizer tokensPacket = new StringTokenizer(packet, "*");  // Tokeniza el paquete
-                tokensPacket.nextToken(); // Quién es el que envía el paquete
-                String transmitterRoutes = tokensPacket.nextToken(); // Guarda todas las rutas separadas por ","
-                StringTokenizer tokensTransmitterRoutes = new StringTokenizer(transmitterRoutes, ",");  // Tokeniza las rutas separadas por ","
-                String updatedRoute;
-                while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
-                    updatedRoute = tokensTransmitterRoutes.nextToken();
-                    if(!updatedRoute.contains(this.id)){
-                        this.updateRoute(updatedRoute);
-                    }
+                String AS = tokensPacket.nextToken(); // Quién es el que envía el paquete
+                this.cleanASRoutes(AS);
+                if (tokensPacket.hasMoreTokens()) {
+                    String transmitterRoutes = tokensPacket.nextToken(); // Guarda todas las rutas separadas por ","
+                    StringTokenizer tokensTransmitterRoutes = new StringTokenizer(transmitterRoutes, ",");  // Tokeniza las rutas separadas por ","
+                    String updatedRoute;
+                    while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
+                        updatedRoute = tokensTransmitterRoutes.nextToken();
+                        if(!updatedRoute.contains(this.id)){
+                            this.updateRoute(updatedRoute);
+                        }
 
+                    }
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Error in receiveUpdate");
-            }finally {
-                semaphore.release();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
-    public String getUpdatePackage(String neighbor) { // Uso del socket, forman el String para enviar
+    public synchronized String getUpdatePackage(String neighbor) { // Uso del socket, forman el String para enviar
         String packet = this.id + "*";
         int i = 1; // Utilizado para saber cuando se dejan de agrega ","
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) { // Recorre todas las subredes conocidas
@@ -90,6 +100,7 @@ public class RoutingTable {
                         else {
                             String route = entry.getValue().get(j);
                             if (!route.contains(neighbor)) {
+                                System.out.println("RENATOOO :3");
                                 temporalPacket += "-" + route;
                                 packet += temporalPacket + ",";
                             }
@@ -106,7 +117,7 @@ public class RoutingTable {
         return packet;
     }
 
-    public void updateRoute(String route) {
+    public synchronized void updateRoute(String route) {
         StringTokenizer tokensRoute = new StringTokenizer(route, ":"); // Tokeniza la ruta
         if (tokensRoute.hasMoreTokens()) {
             String subnet = tokensRoute.nextToken(); // Guarda la subred de la ruta, ejemplo: 192.168.0.0
@@ -126,7 +137,7 @@ public class RoutingTable {
         }
     }
 
-    public void showRoutes() {
+    public synchronized void showRoutes() {
         System.out.println("\nKnowledge routes by " + this.id + ":\n");
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             int minimum = this.getMinimumRouteSize(entry.getValue());
@@ -145,7 +156,7 @@ public class RoutingTable {
         }
     }
 
-    private int getMinimumRouteSize(ArrayList<String> paths) {
+    private synchronized int getMinimumRouteSize(ArrayList<String> paths) {
         String path = paths.get(0);
         StringTokenizer pathTokenizer = new StringTokenizer(path, "-");
         int value = pathTokenizer.countTokens();

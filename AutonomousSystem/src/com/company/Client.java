@@ -5,26 +5,25 @@ import java.io.*;
 /**
  * Created by Renato & Vladimir on 21/10/2017.
  */
-public class Client extends Connection implements Runnable{
+public class Client extends Connection implements Runnable {
     private RoutingTable routingTable;
     private int port;
     private String hostAddress;
 
 
-
-    public  Client(RoutingTable routingTable, int port, String host) throws IOException {
+    public Client(RoutingTable routingTable, int port, String host) throws IOException {
         this.routingTable = routingTable;
         this.port = port;
-        this.hostAddress= host;
+        this.hostAddress = host;
         this.PORT = port;
         this.HOST = host;
         this.connectedAS = "";
     }
 
-    public void startClient(){
+    public void startClient() {
         try {
-            this.initConnection("client",this.port,this.hostAddress);
-            if(this.cs!=null && !this.cs.isClosed()){
+            this.initConnection("client", this.port, this.hostAddress);
+            if (this.cs != null && !this.cs.isClosed()) {
                 this.outServer = new DataOutputStream(cs.getOutputStream());
                 DataInputStream input = new DataInputStream(cs.getInputStream());
                 while (this.active) {
@@ -33,7 +32,7 @@ public class Client extends Connection implements Runnable{
                     this.serverMessage = input.readUTF();
                     if (this.serverMessage == null) {
                         System.out.println("Lost connection");
-                    }else {
+                    } else {
                         System.out.println("Server message: " + this.serverMessage);
                         this.connectedAS = serverMessage.split("\\*")[0];
                         this.routingTable.receiveUpdate(this.serverMessage);
@@ -57,7 +56,6 @@ public class Client extends Connection implements Runnable{
             //e.printStackTrace();
         }
     }
-
 
 
     @Override

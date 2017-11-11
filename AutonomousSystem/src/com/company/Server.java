@@ -1,9 +1,7 @@
 package com.company;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.*;
 /**
  * Created by Renato & Vladimir on 21/10/2017.
@@ -41,12 +39,14 @@ public class Server extends Connection implements Runnable {
                     this.connectedAS = serverMessage.split("\\*")[0];
                     System.out.println("Connected to AS: " + this.connectedAS);
                     routingTable.receiveUpdate(serverMessage);
-                    outClient.writeUTF(this.routingTable.getUpdatePackage(""/*this.connectedAS*/));
+                    outClient.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS));
                     routingTable.showRoutes();
                     outClient.flush();
                 } else {
                     System.out.println("\nServer " + this.routingTable.getId() + " finished a connection, waiting in the port " + this.port);
                     ss.close();
+                    this.routingTable.deleteAS(this.connectedAS);
+                    this.connectedAS = "";
                     cs = ss.accept();
                     System.out.println("Client connected to the server " + this.routingTable.getId());
                 }
