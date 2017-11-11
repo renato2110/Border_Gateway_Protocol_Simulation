@@ -100,7 +100,6 @@ public class RoutingTable {
                         else {
                             String route = entry.getValue().get(j);
                             if (!route.contains(neighbor)) {
-                                System.out.println("RENATOOO :3");
                                 temporalPacket += "-" + route;
                                 packet += temporalPacket + ",";
                             }
