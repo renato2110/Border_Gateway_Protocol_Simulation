@@ -37,7 +37,7 @@ public class RoutingTable {
                     entry.getValue().remove(entry.getValue().get(i));
                 }
             }
-            if (entry.getValue().isEmpty()){ // Se almacenan las subredes, ya que si se eliminan de una vez se presenta un error en el ciclo
+            if (entry.getValue().isEmpty()) { // Se almacenan las subredes, ya que si se eliminan de una vez se presenta un error en el ciclo
                 deleteRoutes.add(entry.getKey());
             }
         }
@@ -51,53 +51,52 @@ public class RoutingTable {
     }
 
     public synchronized void receiveUpdate(String packet) {
-            try {
+        try {
 
-                StringTokenizer tokensPacket = new StringTokenizer(packet, "*");  // Tokeniza el paquete
-                String AS = tokensPacket.nextToken(); // Quién es el que envía el paquete
-                this.cleanASRoutes(AS);
-                if (tokensPacket.hasMoreTokens()) {
-                    String transmitterRoutes = tokensPacket.nextToken(); // Guarda todas las rutas separadas por ","
-                    StringTokenizer tokensTransmitterRoutes = new StringTokenizer(transmitterRoutes, ",");  // Tokeniza las rutas separadas por ","
-                    String updatedRoute;
-                    while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
-                        updatedRoute = tokensTransmitterRoutes.nextToken();
-                        if(!updatedRoute.contains(this.id)){
-                            this.updateRoute(updatedRoute);
-                        }
-
+            StringTokenizer tokensPacket = new StringTokenizer(packet, "*");  // Tokeniza el paquete
+            String AS = tokensPacket.nextToken(); // Quién es el que envía el paquete
+            this.cleanASRoutes(AS);
+            if (tokensPacket.hasMoreTokens()) {
+                String transmitterRoutes = tokensPacket.nextToken(); // Guarda todas las rutas separadas por ","
+                StringTokenizer tokensTransmitterRoutes = new StringTokenizer(transmitterRoutes, ",");  // Tokeniza las rutas separadas por ","
+                String updatedRoute;
+                while (tokensTransmitterRoutes.hasMoreTokens()) {  // Manda a agregar cada ruta a la "tabla de enrutamiento"
+                    updatedRoute = tokensTransmitterRoutes.nextToken();
+                    if (!updatedRoute.contains(this.id)) {
+                        this.updateRoute(updatedRoute);
                     }
-                }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Error in receiveUpdate");
+                }
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error in receiveUpdate");
+        }
     }
 
     public synchronized String getUpdatePackage(String neighbor) { // Uso del socket, forman el String para enviar
         String packet = this.id + "*";
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) { // Recorre todas las subredes conocidas
 
-                String temporalPacket = entry.getKey() + ":" + id; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
-                int minimum = this.getMinimumRouteSize(entry.getValue()); // Define el tamaño para la ruta menor
-                for (int j = 0; j < entry.getValue().size(); j++) { //Recorre las rutas conocidas hasta encontrar la menor
-                    if (minimum == j) {
-                        if (entry.getValue().get(j).equals("")) {
+            String temporalPacket = entry.getKey() + ":" + id; // Agrega cada vez la una subred y ":", ejemplo packet+"192.168.0.0:"
+            int minimum = this.getMinimumRouteSize(entry.getValue()); // Define el tamaño para la ruta menor
+            for (int j = 0; j < entry.getValue().size(); j++) { //Recorre las rutas conocidas hasta encontrar la menor
+                if (minimum == j) {
+                    if (entry.getValue().get(j).equals("")) {
+                        packet += temporalPacket + ",";
+                    } else {
+                        String route = entry.getValue().get(j);
+                        if (!route.contains(neighbor)) {
+                            temporalPacket += "-" + route;
                             packet += temporalPacket + ",";
                         }
-                        else {
-                            String route = entry.getValue().get(j);
-                            if (!route.contains(neighbor)) {
-                                temporalPacket += "-" + route;
-                                packet += temporalPacket + ",";
-                            }
-                            break;
-                        }
+                        break;
                     }
                 }
-
             }
+
+        }
         if (packet.endsWith(",")) {
             packet = packet.substring(0, packet.length() - 1);
         }
@@ -125,23 +124,23 @@ public class RoutingTable {
         }
     }
 
-    public synchronized void showRoutes() {
-        System.out.println("\nKnowledge routes by " + this.id + ":\n");
+    public synchronized String showRoutes() {
+        String message = "Knowledge routes by " + this.id + ":\r\n\r\n";
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             int minimum = this.getMinimumRouteSize(entry.getValue());
             for (int i = 0; i < entry.getValue().size(); i++) {
                 if (minimum == i) {
-                    System.out.printf("*");
+                    message += "*";
                 }
-                System.out.printf("SUBNET " + entry.getKey() + ": ");
+                message += "SUBNET " + entry.getKey() + ": ";
                 if (entry.getValue().get(i).equals("")) {
-                    System.out.println("DIRECTLY CONNECTED");
-                }else{
-                    System.out.println(entry.getValue().get(i));
+                    message += "DIRECTLY CONNECTED \r\n";
+                } else {
+                    message += entry.getValue().get(i) + "\r\n";
                 }
-
             }
         }
+        return message;
     }
 
     private synchronized int getMinimumRouteSize(ArrayList<String> paths) {

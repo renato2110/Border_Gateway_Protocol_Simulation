@@ -22,14 +22,16 @@ public class Server extends Connection implements Runnable {
 
     public void startServer() {
         try {
-
+            String writing = "";
             this.initConnection("server", this.port, "localhost");
-
-            System.out.println("\nServer " + this.routingTable.getId() + " waiting in the port " + this.port);
+            writing = "Server " + this.routingTable.getId() + " waiting in the port " + this.port;
+            System.out.println(writing);
+            this.logbook.writeInLogbook(writing);
 
             cs = ss.accept();
-
-            System.out.println("Client connected to the server " + this.routingTable.getId());
+            writing = "Client connected to the server " + this.routingTable.getId() + "\r\n";
+            this.logbook.writeInLogbook(writing);
+            System.out.println(writing);
             outClient = new DataOutputStream(cs.getOutputStream());
             outClient.flush();
             DataInputStream input = new DataInputStream(cs.getInputStream());
@@ -38,20 +40,24 @@ public class Server extends Connection implements Runnable {
             while (this.active) {
                 Thread.sleep(10000);
                 if ((serverMessage = input.readUTF()) != null) {
-                    System.out.println("\nReceived Message: " + serverMessage);
+                    writing = "Received Message: " + serverMessage + "\r\n";
+                    System.out.println(writing);
                     this.connectedAS = serverMessage.split("\\*")[0];
-                    System.out.println("Connected to AS: " + this.connectedAS);
                     routingTable.receiveUpdate(serverMessage);
                     outClient.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS));
-                    routingTable.showRoutes();
+                    writing = routingTable.showRoutes();
+                    this.logbook.writeInLogbook(writing);
+                    System.out.println(writing);
                     outClient.flush();
                 } else {
-                    System.out.println("\nServer " + this.routingTable.getId() + " finished a connection, waiting in the port " + this.port);
+                    writing = "Server " + this.routingTable.getId() + " finished a connection, waiting in the port " + this.port + "\r\n";
+                    System.out.println(writing);
                     ss.close();
                     this.routingTable.cleanASRoutes(this.connectedAS);
                     this.connectedAS = "";
                     cs = ss.accept();
-                    System.out.println("Client connected to the server " + this.routingTable.getId());
+                    writing = "Client connected to the server " + this.routingTable.getId() + "\r\n";
+                    System.out.println(writing);
                 }
             }
         } catch (Exception e) {

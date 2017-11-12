@@ -20,7 +20,8 @@ public class Menu {
                 System.out.println("2. Stop router");
                 System.out.println("3. Add subnet");
                 System.out.println("4. Show routes");
-                System.out.println("5. Exit");
+                System.out.println("5. Open Logbook");
+                System.out.println("6. Exit");
                 System.out.print("Option: ");
                 System.out.flush();
                 option = sc.nextLine();
@@ -64,6 +65,13 @@ public class Menu {
                         }
                         break;
                     case "5":
+                        if(isRunningRouter){
+                            this.router.openLogbook();
+                        }else {
+                            System.out.println("\nThe router is not running");
+                        }
+                        break;
+                    case "6":
                         contExecution = false;
                         System.out.println("Exit router.");
                         break;

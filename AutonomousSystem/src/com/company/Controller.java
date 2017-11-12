@@ -18,8 +18,8 @@ public class Controller{
     public Controller(String path) throws IOException {
         this.servers = new HashMap<>();
         this.clients = new ArrayList<>();
-        this.readInputFile(path);
         this.logbook = new Logbook();
+        this.readInputFile(path);
     }
 
     private void readInputFile(String path) {
@@ -119,5 +119,7 @@ public class Controller{
         }
     }
 
-
+    public void openLogbook() throws IOException {
+        this.logbook.openLogbook();
+    }
 }
