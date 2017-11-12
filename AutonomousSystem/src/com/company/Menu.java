@@ -42,6 +42,7 @@ public class Menu {
                         if (isRunningRouter) {
                             this.router.stopClients();
                             this.router.stopServers();
+                            isRunningRouter = false;
                         } else {
                             System.out.println("The router is not running!!");
                         }
