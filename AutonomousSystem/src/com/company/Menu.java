@@ -20,7 +20,7 @@ public class Menu {
                 System.out.println("2. Stop router");
                 System.out.println("3. Add subnet");
                 System.out.println("4. Show routes");
-                System.out.println("5. Open Logbook");
+                System.out.println("5. Open logbook");
                 System.out.println("6. Exit");
                 System.out.print("Option: ");
                 System.out.flush();
