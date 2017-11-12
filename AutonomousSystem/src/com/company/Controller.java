@@ -85,11 +85,12 @@ public class Controller{
         }
     }
 
-    public void showRoutes(){
-        this.routingTable.showRoutes();
+    public String showRoutes(){
+        return this.routingTable.showRoutes();
     }
 
-    public void addSubnet(String subnet){
+    public void addSubnet(String subnet) throws IOException {
+        this.logbook.writeInLogbook("Added the subnet: " + subnet + "\r\n");
         this.routingTable.addSubnet(subnet);
     }
 

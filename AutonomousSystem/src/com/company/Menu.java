@@ -27,59 +27,71 @@ public class Menu {
                 option = sc.nextLine();
                 switch (option) {
                     case "1":
-                        System.out.println("Starting router");
-                        if(!isRunningRouter){
+                        System.out.println("\nStarting router");
+                        if (!isRunningRouter) {
                             System.out.printf("Insert the file name: ");
                             path = sc.nextLine();
                             this.router = new Controller(path);
                             isRunningRouter = true;
-                        }else{
-                            System.out.println("The router is running");
+                        } else {
+                            System.out.println("The router is running!!");
                         }
                         break;
                     case "2":
-                        System.out.println("Stopping router");
-                        if(isRunningRouter){
+                        System.out.println("\nStopping router");
+                        if (isRunningRouter) {
                             this.router.stopClients();
                             this.router.stopServers();
-                        }else {
-                            System.out.println("The router is not running");
+                        } else {
+                            System.out.println("The router is not running!!");
                         }
                         break;
                     case "3":
                         System.out.flush();
-                        System.out.print("Enter the subnet you want to add: ");
+                        System.out.print("\nEnter the subnet you want to add: ");
                         subnet = sc.nextLine();
-                        if(isRunningRouter){
+                        if (isRunningRouter) {
                             this.router.addSubnet(subnet);
-                        }else {
-                            System.out.println("The router is not running");
+                        } else {
+                            System.out.println("The router is not running!!");
                         }
                         break;
-                    case "4":;
-                        System.out.println("Showing the routes:");
-                        if(isRunningRouter){
-                            this.router.showRoutes();
-                        }else {
-                            System.out.println("The router is not running");
+                    case "4":
+                        ;
+                        System.out.println("\nShowing the routes:");
+                        if (isRunningRouter) {
+                            System.out.println(this.router.showRoutes());
+                        } else {
+                            System.out.println("The router is not running!!");
                         }
                         break;
                     case "5":
-                        if(isRunningRouter){
+                        if (isRunningRouter) {
                             this.router.openLogbook();
-                        }else {
-                            System.out.println("\nThe router is not running");
+                        } else {
+                            System.out.println("The router is not running!!");
                         }
                         break;
                     case "6":
-                        contExecution = false;
-                        System.out.println("Exit router.");
+                        System.out.println("\nSurely you want to exit the router? Y/N");
+                        option = sc.nextLine();
+                        option = option.toUpperCase();
+                        while (!option.equals("Y") && !option.equals("N")) {
+                            System.out.println("\nSurely you want to exit the router? Y/N");
+                            option = sc.nextLine();
+                            option = option.toUpperCase();
+                        }
+                        if (option.equals("Y")) {
+                            contExecution = false;
+                            System.out.println("\nExit router.");
+                            System.exit(0);
+                        }
                         break;
                     default:
                         break;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
