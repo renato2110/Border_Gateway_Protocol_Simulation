@@ -13,11 +13,13 @@ public class Controller{
     private RoutingTable routingTable;
     private HashMap<String, String> servers;
     private List<Client> clients;
+    private Logbook logbook;
 
     public Controller(String path) throws IOException {
         this.servers = new HashMap<>();
         this.clients = new ArrayList<>();
         this.readInputFile(path);
+        this.logbook = new Logbook();
     }
 
     private void readInputFile(String path) {
@@ -53,7 +55,7 @@ public class Controller{
                                 if(stringTokenizer.hasMoreTokens()){
                                     port = stringTokenizer.nextToken();
                                     servers.put(ip, port);
-                                    newClient = new Client(this.routingTable, Integer.parseInt(port),ip);
+                                    newClient = new Client(this.routingTable, Integer.parseInt(port),ip, this.logbook);
                                     this.clients.add(newClient);
                                 }
                             }
@@ -62,7 +64,7 @@ public class Controller{
                     case 3:
                             this.listeningServers = new ArrayList<Server>();
                             while ((reader = input.readLine()) != null) {
-                                this.listeningServers.add(new Server(this.routingTable, Integer.parseInt(reader)));
+                                this.listeningServers.add(new Server(this.routingTable, Integer.parseInt(reader), this.logbook));
                             }
                             break;
                     default:

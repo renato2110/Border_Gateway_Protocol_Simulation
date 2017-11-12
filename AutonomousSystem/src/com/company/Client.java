@@ -1,5 +1,7 @@
 package com.company;
 
+import sun.rmi.runtime.Log;
+
 import java.io.*;
 
 /**
@@ -11,13 +13,14 @@ public class Client extends Connection implements Runnable {
     private String hostAddress;
 
 
-    public Client(RoutingTable routingTable, int port, String host) throws IOException {
+    public Client(RoutingTable routingTable, int port, String host, Logbook logbook) throws IOException {
         this.routingTable = routingTable;
         this.port = port;
         this.hostAddress = host;
         this.PORT = port;
         this.HOST = host;
         this.connectedAS = "";
+        this.logbook = logbook;
     }
 
     public void startClient() {

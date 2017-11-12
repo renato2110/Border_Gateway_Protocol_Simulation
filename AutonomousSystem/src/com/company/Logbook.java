@@ -27,7 +27,7 @@ public class Logbook {
         Date actual = new Date();
         String moment = simpleDateFormat.format(actual);
 
-        bufferedWriter.write("Date and time of execution: " + moment + "\r\n"+ "\r\n");
+        bufferedWriter.write("Date and time of execution: " + moment + ".\r\n"+ "\r\n");
         bufferedWriter.close();
     }
 

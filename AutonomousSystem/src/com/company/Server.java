@@ -1,5 +1,7 @@
 package com.company;
 
+import sun.rmi.runtime.Log;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.*;
@@ -11,10 +13,11 @@ public class Server extends Connection implements Runnable {
     private RoutingTable routingTable;
     private int port;
 
-    public Server(RoutingTable routingTable, int PORT) throws IOException {
+    public Server(RoutingTable routingTable, int PORT, Logbook logbook) throws IOException {
         this.port = PORT;
         this.routingTable = routingTable;
         this.connectedAS = "";
+        this.logbook = logbook;
     }
 
     public void startServer() {
