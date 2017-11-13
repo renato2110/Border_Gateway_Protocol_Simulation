@@ -131,12 +131,6 @@ public class MenuInterface {
                 }
             }
         });
-
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                System.out.println(":)");
-            }
-        });
     }
 
     public void startInterface() {
@@ -144,6 +138,17 @@ public class MenuInterface {
         frame.setContentPane(new MenuInterface().panel);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        frame.addWindowListener( new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                int option = JOptionPane.showConfirmDialog(null, "¿Surely you want to exit the router?", "Exit", 2);
+                if (option == 0) {
+                    System.exit(0);
+                }
+            }
+        } );
+
         frame.pack();
         this.isRunningRouter = false;
         frame.setVisible(true);
