@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.gui.MenuInterface">
+  <grid id="27dc6" binding="panel" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="168" height="255"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="ae5a7" class="javax.swing.JButton" binding="btStarRouter">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="108" height="29"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Start Router"/>
+        </properties>
+      </component>
+      <component id="c27f9" class="javax.swing.JButton" binding="btStopRouter">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="108" height="31"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Stop Router"/>
+        </properties>
+      </component>
+      <component id="416e0" class="javax.swing.JButton" binding="btAddSubnet">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="108" height="34"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Add Subnet"/>
+        </properties>
+      </component>
+      <component id="2b8c9" class="javax.swing.JButton" binding="btShowRoutes">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="108" height="33"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Show Routes"/>
+        </properties>
+      </component>
+      <component id="e0382" class="javax.swing.JButton" binding="btOpenLogbook">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="108" height="36"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Open Logbook"/>
+        </properties>
+      </component>
+      <component id="956e1" class="javax.swing.JButton" binding="btExit">
+        <constraints>
+          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="108" height="11"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Exit"/>
+        </properties>
+      </component>
+      <hspacer id="840d6">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+      <vspacer id="4ec27">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="108" height="12"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <vspacer id="6a9e2">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="11" height="12"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <vspacer id="c83c9">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="11" height="12"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <vspacer id="d4c48">
+        <constraints>
+          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="108" height="12"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <vspacer id="2e6fa">
+        <constraints>
+          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <vspacer id="7ed05">
+        <constraints>
+          <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+    </children>
+  </grid>
+</form>

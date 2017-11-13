@@ -123,4 +123,8 @@ public class Controller{
     public void openLogbook() throws IOException {
         this.logbook.openLogbook();
     }
+
+    public boolean containsRoute(String route){
+        return this.routingTable.containsRoute(route);
+    }
 }

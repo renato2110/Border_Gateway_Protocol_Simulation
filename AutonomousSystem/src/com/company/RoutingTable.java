@@ -158,4 +158,12 @@ public class RoutingTable {
         }
         return minimum;
     }
+
+    public boolean containsRoute(String route){
+        boolean contains = false;
+        if (routes.containsKey(route)) {
+            contains = true;
+        }
+        return contains;
+    }
 }
