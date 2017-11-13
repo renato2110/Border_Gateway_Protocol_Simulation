@@ -33,7 +33,7 @@ public class RoutingTable {
         ArrayList deleteRoutes = new ArrayList(); // Utilizado para almacenar las subredes que quedan sin rutas, para una eliminación posterior
         for (Map.Entry<String, ArrayList<String>> entry : this.routes.entrySet()) {
             for (int i = 0; i < entry.getValue().size(); i++) {
-                if ((entry.getValue().get(i)).contains(AS)) {
+                if ((!AS.equals("")) && (entry.getValue().get(i)).contains(AS)) {
                     entry.getValue().remove(entry.getValue().get(i));
                 }
             }
@@ -159,7 +159,7 @@ public class RoutingTable {
         return minimum;
     }
 
-    public boolean containsRoute(String route){
+    public boolean containsRoute(String route) {
         boolean contains = false;
         if (routes.containsKey(route)) {
             contains = true;
