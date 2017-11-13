@@ -60,6 +60,7 @@ public class Client extends Connection implements Runnable {
             //cs.close();
         } catch (Exception e) {
             this.logbook.writeInLogbook("Error connecting with " + this.connectedAS);
+            this.routingTable.cleanASRoutes(this.connectedAS);
             this.restart(); //Mandar a la bitácora
             this.cs = null;
             this.outServer = null;
