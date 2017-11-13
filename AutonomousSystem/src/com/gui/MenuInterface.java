@@ -134,10 +134,7 @@ public class MenuInterface {
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
-                int option = JOptionPane.showConfirmDialog(null, "¿Surely you want to exit the router?", "Exit", 2);
-                if (option == 0) {
-                    System.exit(0);
-                }
+                System.out.println(":)");
             }
         });
     }
