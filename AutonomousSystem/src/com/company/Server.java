@@ -64,6 +64,7 @@ public class Server extends Connection implements Runnable {
             }
         } catch (Exception e) {
             this.logbook.writeInLogbook("Error connecting with " + this.connectedAS);
+            this.routingTable.cleanASRoutes(this.connectedAS);
             this.restart();
             this.cs = null;
             this.ss = null;
