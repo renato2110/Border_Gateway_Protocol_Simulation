@@ -68,7 +68,9 @@ public class Server extends Connection implements Runnable {
             this.cs = null;
             this.ss = null;
             this.outClient =null;
-            this.startServer();
+            if(!this.turnOff){
+                this.startServer();
+            }
         }
     }
 

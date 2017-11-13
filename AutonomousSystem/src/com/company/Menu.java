@@ -85,7 +85,7 @@ public class Menu {
                         if (option.equals("Y")) {
                             contExecution = false;
                             System.out.println("\nExit router.");
-                            System.exit(0);
+                            //System.exit(0);
                         }
                         break;
                     default:

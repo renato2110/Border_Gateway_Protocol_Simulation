@@ -17,6 +17,7 @@ public abstract class Connection {
     protected Logbook logbook;
     protected String connectedAS;
     protected boolean active;
+    protected boolean turnOff;
 
     public Connection(){
         this.active = true;
@@ -26,6 +27,7 @@ public abstract class Connection {
         this.PORT = PORT;
         this.HOST = HOST;
         this.active = true;
+        this.turnOff = false;
         if (tipo.equalsIgnoreCase("server")) {
 
             ss = new ServerSocket(this.PORT);
@@ -59,6 +61,7 @@ public abstract class Connection {
     public void stop(){
         try {
             this.active = false;
+            this.turnOff = true;
             if(cs!=null && !cs.isClosed()){
                 cs.close();
             }

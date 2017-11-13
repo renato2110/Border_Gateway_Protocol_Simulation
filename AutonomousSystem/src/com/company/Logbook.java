@@ -14,32 +14,54 @@ public class Logbook {
     private static File file;
 
     public Logbook() throws IOException {
-        this.path = ".\\AutonomousSystem\\Logbook.txt";
+        if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+            this.path = ".\\AutonomousSystem\\Logbook.txt";
+        }else
+        {
+            this.path = "./AutonomousSystem/Logbook.txt";
+        }
         this.file = new File(path);
         this.startFile();
     }
 
-    private void startFile() throws IOException {
-        FileWriter fileWriter = new FileWriter(file);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
+    private String getMoment(){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
         Date actual = new Date();
-        String moment = simpleDateFormat.format(actual);
+        return simpleDateFormat.format(actual);
+    }
 
-        bufferedWriter.write("Date and time of execution: " + moment + ".\r\n"+ "\r\n");
+    private void startFile() throws IOException {
+        FileWriter fileWriter;
+        if(this.file.exists()){
+            fileWriter = new FileWriter(file,true);
+        }else {
+            fileWriter = new FileWriter(file);
+        }
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+        String moment = this.getMoment();
+
+        bufferedWriter.write("\nDate and time of execution: " + moment + ".\r\n"+ "\r\n");
         bufferedWriter.close();
     }
 
     public synchronized void writeInLogbook(String writing) throws IOException {
         FileWriter fileWriter = new FileWriter(file, true);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write(writing);
+        bufferedWriter.write(this.getMoment() + " : " + writing);
         bufferedWriter.newLine();
         bufferedWriter.close();
     }
 
     public synchronized void openLogbook() throws IOException {
-        Runtime.getRuntime().exec("cmd /c start .\\AutonomousSystem\\Logbook.txt");
+        if(System.getProperty("os.name").toLowerCase().contains("windows")){
+            Runtime.getRuntime().exec("cmd /c start .\\AutonomousSystem\\Logbook.txt");
+        }else {
+
+            String[] args = new String[] {"xterm", "-e", "/usr/bin/tail -f ./AutonomousSystem/Logbook.txt"};
+            Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec(args);
+        }
+
     }
 }

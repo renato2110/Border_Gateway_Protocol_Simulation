@@ -62,8 +62,9 @@ public class Client extends Connection implements Runnable {
             this.stop(); //Mandar a la bitácora
             this.cs = null;
             this.outServer = null;
-            this.startClient();
-
+            if(!turnOff){
+                this.startClient();
+            }
             //e.printStackTrace();
         }
     }
