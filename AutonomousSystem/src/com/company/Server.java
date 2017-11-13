@@ -63,8 +63,8 @@ public class Server extends Connection implements Runnable {
                 }
             }
         } catch (Exception e) {
-            //e.printStackTrace();
-            this.stop();
+            this.logbook.writeInLogbook("Error connecting with " + this.connectedAS);
+            this.restart();
             this.cs = null;
             this.ss = null;
             this.outClient =null;

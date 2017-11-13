@@ -59,7 +59,8 @@ public class Client extends Connection implements Runnable {
             }
             //cs.close();
         } catch (Exception e) {
-            this.stop(); //Mandar a la bitácora
+            this.logbook.writeInLogbook("Error connecting with " + this.connectedAS);
+            this.restart(); //Mandar a la bitácora
             this.cs = null;
             this.outServer = null;
             if(!turnOff){

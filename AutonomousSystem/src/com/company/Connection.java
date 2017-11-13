@@ -60,8 +60,23 @@ public abstract class Connection {
 
     public void stop(){
         try {
+            this.logbook.writeInLogbook("Stopping the AS");
             this.active = false;
             this.turnOff = true;
+            if(cs!=null && !cs.isClosed()){
+                cs.close();
+            }
+            if(ss != null && !ss.isClosed()){
+                ss.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void restart(){
+        try {
+            this.active = false;
             if(cs!=null && !cs.isClosed()){
                 cs.close();
             }

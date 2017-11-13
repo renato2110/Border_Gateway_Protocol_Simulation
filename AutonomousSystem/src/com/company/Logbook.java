@@ -45,12 +45,18 @@ public class Logbook {
         bufferedWriter.close();
     }
 
-    public synchronized void writeInLogbook(String writing) throws IOException {
-        FileWriter fileWriter = new FileWriter(file, true);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write(this.getMoment() + " : " + writing);
-        bufferedWriter.newLine();
-        bufferedWriter.close();
+    public synchronized void writeInLogbook(String writing) {
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(file, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(this.getMoment() + " : " + writing);
+            bufferedWriter.newLine();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public synchronized void openLogbook() throws IOException {
