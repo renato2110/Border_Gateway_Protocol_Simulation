@@ -8,10 +8,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
-
 /**
- * Created by Renato on 12/11/2017.
+ * Created by Renato & Vladimir on 12/11/2017.
  */
 public class MenuInterface {
     private JPanel panel;
