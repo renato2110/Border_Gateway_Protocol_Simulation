@@ -40,7 +40,8 @@ public abstract class Connection {
                     cs = new Socket(inetAddress,PORT);
 
                 }catch (ConnectException e){
-                    System.out.println("There is no connection to server: " + HOST + ":" + PORT);
+                    this.logbook.writeInLogbook("There is no connection to server: " + HOST + ":" + PORT);
+                    //System.out.println("There is no connection to server: " + HOST + ":" + PORT);
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException s) {

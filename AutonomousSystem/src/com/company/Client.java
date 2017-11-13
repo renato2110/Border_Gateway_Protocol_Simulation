@@ -38,7 +38,7 @@ public class Client extends Connection implements Runnable {
                     this.serverMessage = input.readUTF();
                     if (this.serverMessage == null) {
                         this.logbook.writeInLogbook("Lost connection\r\n");
-                        System.out.println("Lost connection");
+                        //System.out.println("Lost connection");
                     } else {
                         writing = "Server message: " + this.serverMessage + "\r\n";
                         this.logbook.writeInLogbook(writing);
