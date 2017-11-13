@@ -33,6 +33,7 @@ public class Menu {
                             path = sc.nextLine();
                             this.router = new Controller(path);
                             isRunningRouter = true;
+                            System.out.println("Router Connected!");
                         } else {
                             System.out.println("The router is running!!");
                         }
@@ -85,7 +86,7 @@ public class Menu {
                         if (option.equals("Y")) {
                             contExecution = false;
                             System.out.println("\nExit router.");
-                            //System.exit(0);
+                            System.exit(0);
                         }
                         break;
                     default:
