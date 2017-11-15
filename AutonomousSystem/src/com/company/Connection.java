@@ -2,6 +2,7 @@ package com.company;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.*;
 
 /**
@@ -13,7 +14,8 @@ public abstract class Connection {
     protected String serverMessage;
     protected ServerSocket ss;
     protected Socket cs;
-    protected DataOutputStream outServer, outClient;
+    //protected DataOutputStream outServer, outClient;
+    protected PrintWriter outServer, outClient;
     protected Logbook logbook;
     protected String connectedAS;
     protected boolean active;

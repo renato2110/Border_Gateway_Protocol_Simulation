@@ -27,15 +27,15 @@ public class Client extends Connection implements Runnable {
         try {
             this.initConnection("client", this.port, this.hostAddress);
             if (this.cs != null && !this.cs.isClosed()) {
-                this.outServer = new DataOutputStream(cs.getOutputStream());
-                DataInputStream input = new DataInputStream(cs.getInputStream());
+                this.outServer = new PrintWriter(cs.getOutputStream(),true);
+                BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
                 String writing = "";
                 while (this.active) {
                     writing = "Sending to the server " + this.connectedAS + ": " + this.routingTable.getUpdatePackage(this.connectedAS)+"\r\n";
                     //System.out.println(writing);
                     this.logbook.writeInLogbook(writing);
-                    this.outServer.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS));
-                    this.serverMessage = input.readUTF();
+                    this.outServer.println(this.routingTable.getUpdatePackage(this.connectedAS));
+                    this.serverMessage = input.readLine();
                     if (this.serverMessage == null) {
                         this.logbook.writeInLogbook("Lost connection\r\n");
                         //System.out.println("Lost connection");

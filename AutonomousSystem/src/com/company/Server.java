@@ -30,23 +30,21 @@ public class Server extends Connection implements Runnable {
             writing = "Client connected to the server " + this.routingTable.getId() + "\r\n";
             this.logbook.writeInLogbook(writing);
             //System.out.println(writing);
-            outClient = new DataOutputStream(cs.getOutputStream());
-            outClient.flush();
-            DataInputStream input = new DataInputStream(cs.getInputStream());
+            outClient = new PrintWriter(cs.getOutputStream(),true);
+            BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
 
             //System.out.println(serverMessage);
             while (this.active) {
                 Thread.sleep(10000);
-                if ((serverMessage = input.readUTF()) != null) {
+                if ((serverMessage = input.readLine()) != null) {
                     writing = "Received Message: " + serverMessage + "\r\n";
                     //System.out.println(writing);
                     this.connectedAS = serverMessage.split("\\*")[0];
                     routingTable.receiveUpdate(serverMessage);
-                    outClient.writeUTF(this.routingTable.getUpdatePackage(this.connectedAS));
+                    outClient.println(this.routingTable.getUpdatePackage(this.connectedAS));
                     writing = routingTable.showRoutes();
                     this.logbook.writeInLogbook(writing);
                     //System.out.println(writing);
-                    outClient.flush();
                 } else {
                     writing = "Server " + this.routingTable.getId() + " finished a connection, waiting in the port " + this.port + "\r\n";
                     this.logbook.writeInLogbook(writing);
